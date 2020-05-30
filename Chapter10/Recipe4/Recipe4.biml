@@ -1,0 +1,63 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#
+    string connectionString = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=BIMLmetadata";
+    
+    DataTable dtTables = new DataTable();
+    using (SqlConnection sqlConn = new SqlConnection(connectionString))
+    {
+    string sqlCmd = @"SELECT * from dbo.TableConfig;";
+    SqlDataAdapter sqlDtAdp = new SqlDataAdapter(sqlCmd, sqlConn);
+    sqlDtAdp.Fill(dtTables);  
+    }
+#>
+    <Connections>
+        <Connection Name="WWI_Source_DB" CreateInProject="true" ConnectionString="Data Source=ETLInAzureBook\MSSQL2019;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+        <Connection Name="WWI_DW_Destination_DB" CreateInProject="true" ConnectionString="Data Source=ETLInAzureBook\MSSQL2019;Initial Catalog=WideWorldImportersDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+    </Connections>
+    <Packages>
+        <Package Name="Recipe4" ConstraintMode="LinearOnSuccess">
+            <Variables>
+                <Variable Name="LastETLCutoffTime" DataType="DateTime" IncludeInDebugDump="Include">4/11/2016 10:39:10 AM</Variable>
+                <Variable Name="LineageKey" DataType="Int32" IncludeInDebugDump="Include">0</Variable>
+                <Variable Name="TableName" DataType="String" IncludeInDebugDump="Exclude"></Variable>
+                <Variable Name="TargetETLCutoffTime" DataType="DateTime" IncludeInDebugDump="Include">4/13/2016 11:25:23 AM</Variable>
+            </Variables>
+            <Tasks>
+<#
+    foreach(DataRow drTable in dtTables.Rows) {
+#>
+        <Container Name="Load <#=drTable["TableName"]#> <#=drTable["TableType"]#>" ConstraintMode="LinearOnSuccess">
+            <Tasks>
+        <Expression Name="Set TableName to <#=drTable["TableName"]#>" Expression="@[User::TableName] = &quot;<#=drTable["TableName"]#>&quot;" />
+            <ExecuteSQL Name="Get Lineage Key" ConnectionName="WWI_DW_Destination_DB" ResultSet="SingleRow">
+                <Results>
+                    <Result Name="LineageKey" VariableName="User.LineageKey" />
+                </Results>
+                <Parameters>
+                    <Parameter Name="0" VariableName="User.TableName" Length="-1" DataType="String" />
+                    <Parameter Name="1" VariableName="User.TargetETLCutoffTime" Length="-1" DataType="Date" />
+                </Parameters>
+                <DirectInput>EXEC Integration.GetLineageKey ?, ?;</DirectInput>
+            </ExecuteSQL>
+            <ExecuteSQL Name="Truncate <#=drTable["StagingTableName"]#>" ConnectionName="WWI_DW_Destination_DB">
+                <DirectInput>DELETE FROM Integration.<#=drTable["StagingTableName"]#>;</DirectInput>
+            </ExecuteSQL>
+            <ExecuteSQL Name="Get Last <#=drTable["TableName"]#> ETL Cutoff Time" ConnectionName="WWI_DW_Destination_DB" ResultSet="SingleRow">
+               <Results>
+                  <Result Name="CutoffTime" VariableName="User.LastETLCutoffTime" />
+               </Results>
+               <Parameters>
+                 <Parameter Name="0" VariableName="User.TableName" Length="-1" DataType="String" />
+                 </Parameters>
+                 <DirectInput>EXEC Integration.GetLastETLCutoffTime ?;</DirectInput>
+            </ExecuteSQL>
+            </Tasks>
+        </Container>
+        
+    <#}#>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>
