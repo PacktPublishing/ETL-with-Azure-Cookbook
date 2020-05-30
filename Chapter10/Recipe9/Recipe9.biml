@@ -1,0 +1,72 @@
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<#
+string connectionString = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=BIMLmetadata";
+DataTable dtTables = new DataTable();
+using (SqlConnection sqlConn = new SqlConnection(connectionString))
+{
+    string sqlCmd = @"SELECT * from dbo.CSVConfig;";
+    SqlDataAdapter sqlDtAdp = new SqlDataAdapter(sqlCmd, sqlConn);
+    sqlDtAdp.Fill(dtTables);  
+}
+#>
+
+    <DataFactories>
+        <DataFactory Name="ETLInAzure">
+			<LinkedServices>
+				<HttpServer Name="LSHTTP" AuthenticationType="Anonymous" Url="https://cadatacatalog.state.gov/"/>
+				<AzureDataLakeStoreGen2 Name="ETLInAzure" AccountKey="xxx" Url="https://etlinazure.dfs.core.windows.net"/>
+				<SqlServer Name="WideWorldImportersDW" Username="BookAdmin" Password="zzz" ConnectionString="integrated security=True;data source=ETLInAzureBook\\MSSQL2019;initial catalog=WideWorldImportersDW">
+ 					<ConnectVia IntegrationRuntime="DWsOnPremises"></ConnectVia>
+				</SqlServer>
+				<HttpServer Url="https://raw.githubusercontent.com/fivethirtyeight/data/master/us-weather-history/" AuthenticationType="Anonymous" Name="FiveThirtyEightHTTP"/>
+            </LinkedServices>
+			<Datasets>
+				<HttpFile Name="DSHTTP" LinkedServiceName="LSHTTP" RelativeUrl="/dataset/dbadcbe4-3d99-4225-b0e1-5f300f2ccb62/resource/94d1147b-03ad-431a-98ba-71e0f6d8a879/download/geopoliticalregion.json"/>
+				<AzureDataLakeGen2 Name="DSDL2" LinkedServiceName="ETLInAzure" FolderPath="geo" File="geopoliticalregions.json"/>
+				<#foreach(DataRow drTable in dtTables.Rows) {#>
+				<HttpFile Name="DSHTTP<#=drTable["CityName"]#>" LinkedServiceName="FiveThirtyEightHTTP" RelativeUrl="<#=drTable["CSVName"]#>"></HttpFile>
+				<AzureDataLakeGen2 Name="DSDL<#=drTable["CityName"]#>" LinkedServiceName="ETLInAzure" File="<#=drTable["CityName"]#>.csv" FolderPath="weather">
+					<TextFormat FirstRowAsHeader="true" ColumnDelimiter=","></TextFormat>					
+      			</AzureDataLakeGen2>
+				<SqlServer LinkedServiceName="WideWorldImportersDW" Name="DSSQL<#=drTable["CityName"]#>" Table="Data538.<#=drTable["CityName"]#>"/>
+<#}#>
+
+            </Datasets>
+			<Pipelines>
+				<Pipeline Name="Copy Political Regions">
+					<Activities>
+						<Copy Name="Copy Regions">
+							<HttpSource DatasetName="DSHTTP"/>
+							<AzureDataLakeGen2Sink DatasetName="DSDL2"/>
+                        </Copy>
+                    </Activities>
+                </Pipeline>
+				
+				<Pipeline Name="CopyUSWeather" DependencyMode="Parallel">
+				  <Activities>
+				  <#foreach(DataRow drTable in dtTables.Rows) {#>
+				    <Copy Name="Copy Weather <#=drTable["CityName"]#>">
+				      <HttpSource  DatasetName="DSHTTP<#=drTable["CityName"]#>" />							
+					  <AzureDataLakeGen2Sink DatasetName="DSDL<#=drTable["CityName"]#>" />
+				     </Copy>
+				   <#}#>
+				   </Activities>
+				</Pipeline>
+
+				<Pipeline Name="CopyUSWeatherSQL" DependencyMode="Parallel">
+				  <Activities>
+				  <#foreach(DataRow drTable in dtTables.Rows) {#>
+				    <Copy Name="Copy Weather <#=drTable["CityName"]#> to SQL" >
+				      <AzureDataLakeGen2Source DatasetName="DSDL<#=drTable["CityName"]#>" />		
+					<SqlServerSink  DatasetName="DSSQL<#=drTable["CityName"]#>"/>
+				    </Copy>
+				  <#}#>
+				  </Activities>
+				</Pipeline>
+
+            </Pipelines>
+		</DataFactory>
+    </DataFactories>
+</Biml>
