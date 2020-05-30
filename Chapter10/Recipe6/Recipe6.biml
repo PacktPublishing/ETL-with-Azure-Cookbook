@@ -1,0 +1,71 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<#@ code file="Code.cs" #>    
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#
+    string connectionString = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=BIMLmetadata";
+    string connStrDest = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Initial Catalog=WideWorldImportersDW;Integrated Security=SSPI;";
+    
+    DataTable dtTables = new DataTable();
+    using (SqlConnection sqlConn = new SqlConnection(connectionString))
+    {
+    string sqlCmd = @"SELECT * from dbo.TableConfig;";
+    SqlDataAdapter sqlDtAdp = new SqlDataAdapter(sqlCmd, sqlConn);
+    sqlDtAdp.Fill(dtTables);  
+    }
+
+    foreach(DataRow drTable in dtTables.Rows) {
+    
+    string strColumnSQL = string.Format(@"SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE, DATETIME_PRECISION 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_SCHEMA = 'Integration' AND TABLE_NAME = '{0}' 
+AND NOT (DATA_TYPE = 'int' AND COLUMN_NAME LIKE '% key')
+AND ORDINAL_POSITION > 1 ORDER BY ORDINAL_POSITION",drTable["StagingTableName"]);
+
+string strInject = @"IF 1=0
+	BEGIN
+	SELECT
+	";
+	
+    using (SqlConnection sqlConnDest = new SqlConnection(connStrDest))
+    {
+        SqlCommand command = new SqlCommand(strColumnSQL,sqlConnDest);
+        sqlConnDest.Open();
+        SqlDataReader reader = command.ExecuteReader();
+
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                strInject += @"
+                CAST(NULL AS " + BIMLHelper.GetDataType(reader["DATA_TYPE"].ToString(),reader["CHARACTER_MAXIMUM_LENGTH"].ToString(),reader["NUMERIC_PRECISION"].ToString(),reader["NUMERIC_SCALE"].ToString(),reader["DATETIME_PRECISION"].ToString()) 
+                + @") AS [" + reader["COLUMN_NAME"] + @"],";
+            }
+        }
+        reader.Close();
+        strInject = strInject.TrimEnd(',') + @"
+        END";
+    }
+    
+    #>
+DECLARE @sp NVARCHAR(MAX)
+DECLARE @marker NVARCHAR(MAX) = 'SET NOCOUNT ON;
+    SET XACT_ABORT ON;'
+DECLARE @inject NVARCHAR(MAX) = 
+'SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+	<#=strInject#>
+
+'
+
+SELECT @sp = OBJECT_DEFINITION(OBJECT_ID('[Integration].[<#=drTable["GetStoredProc"]#>]'))
+SET @sp = REPLACE(@sp,' PROCEDURE ', ' OR ALTER PROCEDURE ')
+SET @sp = REPLACE(@sp,@marker,@inject)
+
+PRINT @sp
+
+EXEC (@sp)
+GO
+<#}#>
+            
+</Biml>
