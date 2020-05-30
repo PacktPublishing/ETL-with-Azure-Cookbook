@@ -1,0 +1,9 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<#  var sourceConnection = SchemaManager.CreateConnectionNode("Destination", @"Data Source=ETLInAzureBook\MSSQL2019;Initial Catalog=WideWorldImportersDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;");
+    var sourceMetadata = sourceConnection.GetDatabaseSchema();
+
+    foreach(var table in sourceMetadata.TableNodes) {
+    #>
+SELECT COUNT(1) FROM [<#=table.#>].[<#=table.Name#>]
+<#}#>
+  
