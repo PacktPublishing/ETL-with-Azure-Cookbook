@@ -1,0 +1,520 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="04/13/2020 00:54:46" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="ETLInAzureBook" DTS:CreatorName="BookAdmin" DTS:DTSID="{4048A640-254E-421E-A896-5E04AC069BB1}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1033" DTS:ObjectName="Recipe5" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{B9A6E1B7-B5A3-4D0D-B2CB-4A3C4AEFAE47}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{6A7FE62F-EDE5-4E7D-916B-667C53BBA980}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="LastETLCutoffTime">
+      <DTS:VariableValue DTS:DataType="7">04/11/2016 10:39:10</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{704C17EA-C2F0-4F63-88A2-91441314A94F}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="LineageKey">
+      <DTS:VariableValue DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{9EEEB4D1-6C9A-43A9-982F-A019285927EF}" DTS:IncludeInDebugDump="2345" DTS:Namespace="User" DTS:ObjectName="TableName">
+      <DTS:VariableValue DTS:DataType="8" />
+    </DTS:Variable>
+    <DTS:Variable DTS:CreationName="" DTS:DTSID="{A78322CB-AB9D-44D0-9C94-85B563B076CB}" DTS:IncludeInDebugDump="6789" DTS:Namespace="User" DTS:ObjectName="TargetETLCutoffTime">
+      <DTS:VariableValue DTS:DataType="7">04/13/2016 11:25:23</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{2AB8CDD1-4C20-4E1F-9028-152B2D2EF384}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Calculate ETL Cutoff Time backup" DTS:refId="Package\Calculate ETL Cutoff Time backup" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExpressionTask Expression="@[User::TargetETLCutoffTime] = DATEADD(&quot;Minute&quot;, -5, GETDATE()  )" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{E52E7959-7EF8-4E1C-A6F0-F78AE055BCC7}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Trim Any Milliseconds" DTS:refId="Package\Trim Any Milliseconds" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <ExpressionTask Expression="@[User::TargetETLCutoffTime] = DATEADD(&quot;Millisecond&quot;, 0 - DATEPART(&quot;Millisecond&quot;, @[User::TargetETLCutoffTime]), @[User::TargetETLCutoffTime])" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{21C020AB-59FF-4420-8D2A-9711D8613D07}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Ensure Date Dimension includes current year" DTS:refId="Package\Ensure Date Dimension includes current year" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DECLARE @YearNumber int =  YEAR(SYSDATETIME());&#xA;&#xA;EXEC Integration.PopulateDateDimensionForYear @YearNumber;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{C21144ED-223A-4945-AC16-0C085FEEB78A}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load City Dimension" DTS:refId="Package\Load City Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{8FBA381A-B55C-4363-8A69-8351BB7AA590}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to City" DTS:refId="Package\Load City Dimension\Set TableName to City" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;City&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{14860319-C5A3-4415-8723-DF263F5EA0D7}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load City Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{5D282685-8A1B-4AFB-8DF2-422C9147636C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate City_Staging" DTS:refId="Package\Load City Dimension\Truncate City_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.City_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{051817AB-F832-4209-987B-0F1255B4589F}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last City ETL Cutoff Time" DTS:refId="Package\Load City Dimension\Get Last City ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{BE788545-7CE4-4548-982A-44F3C571AA64}" DTS:From="Package\Load City Dimension\Set TableName to City" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to City_To_Get Lineage Key" DTS:refId="Package\Load City Dimension.PrecedenceConstraints[Constraint_Set TableName to City_To_Get Lineage Key]" DTS:To="Package\Load City Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C47534F0-17C8-439C-AE93-E25B7C2A6260}" DTS:From="Package\Load City Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate City_Staging" DTS:refId="Package\Load City Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate City_Staging]" DTS:To="Package\Load City Dimension\Truncate City_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{233317DB-6304-4B22-80C2-CE7BBE82F182}" DTS:From="Package\Load City Dimension\Truncate City_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate City_Staging_To_Get Last City ETL Cutoff Time" DTS:refId="Package\Load City Dimension.PrecedenceConstraints[Constraint_Truncate City_Staging_To_Get Last City ETL Cutoff Time]" DTS:To="Package\Load City Dimension\Get Last City ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{61A928C9-5782-4540-8E78-2E185573021F}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Customer Dimension" DTS:refId="Package\Load Customer Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{80D5A42A-FC0B-4CE7-BC59-EBB693CDF065}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Customer" DTS:refId="Package\Load Customer Dimension\Set TableName to Customer" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Customer&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{82DD184D-C1D0-4C18-94B5-55500A7E7F7B}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Customer Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{1B23FB02-58D4-47D0-9ACE-C8BA23A59CC8}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Customer_Staging" DTS:refId="Package\Load Customer Dimension\Truncate Customer_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Customer_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6CDD742A-32FF-4C11-ACE5-753A000E41D0}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Customer ETL Cutoff Time" DTS:refId="Package\Load Customer Dimension\Get Last Customer ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{D4A5EDD4-CBED-4DFC-98BC-340C9BB99F65}" DTS:From="Package\Load Customer Dimension\Set TableName to Customer" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Customer_To_Get Lineage Key" DTS:refId="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Set TableName to Customer_To_Get Lineage Key]" DTS:To="Package\Load Customer Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{9A7BC521-70CE-4AA0-B5DE-F0E3C9B86CAD}" DTS:From="Package\Load Customer Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Customer_Staging" DTS:refId="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Customer_Staging]" DTS:To="Package\Load Customer Dimension\Truncate Customer_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{28DE9361-C3AA-41B0-959F-D319AB878035}" DTS:From="Package\Load Customer Dimension\Truncate Customer_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Customer_Staging_To_Get Last Customer ETL Cutoff Time" DTS:refId="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Truncate Customer_Staging_To_Get Last Customer ETL Cutoff Time]" DTS:To="Package\Load Customer Dimension\Get Last Customer ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{E6C3962D-A8AD-4084-AE3C-CE44901E26C7}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Employee Dimension" DTS:refId="Package\Load Employee Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{BDEC9E56-7AE6-4C09-84F7-804793A76FA9}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Employee" DTS:refId="Package\Load Employee Dimension\Set TableName to Employee" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Employee&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{47DE9004-9A31-4A2E-800B-2D17E4CBE35D}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Employee Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{E769FA5A-399B-42CA-8DC2-543D136FFC48}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Employee_Staging" DTS:refId="Package\Load Employee Dimension\Truncate Employee_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Employee_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{3E2E896F-D477-4F9E-9522-D3F18CBCEF0A}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Employee ETL Cutoff Time" DTS:refId="Package\Load Employee Dimension\Get Last Employee ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{CFA26236-9E8C-4763-A769-B5556FB9A635}" DTS:From="Package\Load Employee Dimension\Set TableName to Employee" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Employee_To_Get Lineage Key" DTS:refId="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Set TableName to Employee_To_Get Lineage Key]" DTS:To="Package\Load Employee Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{9A7A1189-440D-4817-876A-1164863B9842}" DTS:From="Package\Load Employee Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Employee_Staging" DTS:refId="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Employee_Staging]" DTS:To="Package\Load Employee Dimension\Truncate Employee_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{D8434748-DBBC-4531-BCFE-A20DF135EA58}" DTS:From="Package\Load Employee Dimension\Truncate Employee_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Employee_Staging_To_Get Last Employee ETL Cutoff Time" DTS:refId="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Truncate Employee_Staging_To_Get Last Employee ETL Cutoff Time]" DTS:To="Package\Load Employee Dimension\Get Last Employee ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{A2704937-1D16-44E0-A812-4098581C4676}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Payment Method Dimension" DTS:refId="Package\Load Payment Method Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{A7ECF7C1-1704-4C2C-B8C2-573DDEFBEBEF}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Payment Method" DTS:refId="Package\Load Payment Method Dimension\Set TableName to Payment Method" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Payment Method&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{5D0235E1-327F-4B8B-8126-51049EBEA2A9}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Payment Method Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{EEAB413D-8328-45DE-A46D-6F7EDC93F8A9}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate PaymentMethod_Staging" DTS:refId="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.PaymentMethod_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{54714DAD-E21D-48E2-918A-DF0A46AC80E6}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Payment Method ETL Cutoff Time" DTS:refId="Package\Load Payment Method Dimension\Get Last Payment Method ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{3DBC9917-3ADB-4A2E-B7E2-B06181ACF25E}" DTS:From="Package\Load Payment Method Dimension\Set TableName to Payment Method" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Payment Method_To_Get Lineage Key" DTS:refId="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Set TableName to Payment Method_To_Get Lineage Key]" DTS:To="Package\Load Payment Method Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{34CAFA94-0773-4E9F-A4B0-33ACF95BAAC4}" DTS:From="Package\Load Payment Method Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate PaymentMethod_Staging" DTS:refId="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate PaymentMethod_Staging]" DTS:To="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{63E1C164-FD70-44A3-A5C4-2CCEE9555E1A}" DTS:From="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate PaymentMethod_Staging_To_Get Last Payment Method ETL Cutoff Time" DTS:refId="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Truncate PaymentMethod_Staging_To_Get Last Payment Method ETL Cutoff Time]" DTS:To="Package\Load Payment Method Dimension\Get Last Payment Method ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{BBCA1B57-ACFA-4DA6-A64A-29762F6FF478}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Stock Item Dimension" DTS:refId="Package\Load Stock Item Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{D6EB6131-F356-48E2-A6F9-03A805A96797}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Stock Item" DTS:refId="Package\Load Stock Item Dimension\Set TableName to Stock Item" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Stock Item&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{F42F86D7-4CC4-4B06-B001-3BC35CCF80F5}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Stock Item Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{2070545C-98F5-4788-9E78-7C1D51382C88}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate StockItem_Staging" DTS:refId="Package\Load Stock Item Dimension\Truncate StockItem_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.StockItem_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C2848C41-8442-449C-8AB5-C7B3EF761F7B}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Stock Item ETL Cutoff Time" DTS:refId="Package\Load Stock Item Dimension\Get Last Stock Item ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{7FBB63D6-B470-4822-ADDF-5387073C9556}" DTS:From="Package\Load Stock Item Dimension\Set TableName to Stock Item" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Stock Item_To_Get Lineage Key" DTS:refId="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Set TableName to Stock Item_To_Get Lineage Key]" DTS:To="Package\Load Stock Item Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{F5C596D6-C5A1-4691-B2EC-2B47140FC9EF}" DTS:From="Package\Load Stock Item Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate StockItem_Staging" DTS:refId="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate StockItem_Staging]" DTS:To="Package\Load Stock Item Dimension\Truncate StockItem_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{9AE26FBB-8CB9-4B89-B48B-F307AE054C67}" DTS:From="Package\Load Stock Item Dimension\Truncate StockItem_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate StockItem_Staging_To_Get Last Stock Item ETL Cutoff Time" DTS:refId="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Truncate StockItem_Staging_To_Get Last Stock Item ETL Cutoff Time]" DTS:To="Package\Load Stock Item Dimension\Get Last Stock Item ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{C46A57FF-0CEA-49FA-846A-6177D047FC7C}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Supplier Dimension" DTS:refId="Package\Load Supplier Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{9647ADCB-E72D-4318-868F-03D3E0A20DAA}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Supplier" DTS:refId="Package\Load Supplier Dimension\Set TableName to Supplier" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Supplier&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{B971D242-E02D-459F-82DB-1A1A16A2C4F5}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Supplier Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{BA8A7474-98E4-4EA5-A996-997162DE029D}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Supplier_Staging" DTS:refId="Package\Load Supplier Dimension\Truncate Supplier_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Supplier_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{3A4B68B6-072C-4F84-B16A-F928A7CF3E4F}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Supplier ETL Cutoff Time" DTS:refId="Package\Load Supplier Dimension\Get Last Supplier ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{22DD0FAC-C984-44B5-828F-46BE9F5F1C6D}" DTS:From="Package\Load Supplier Dimension\Set TableName to Supplier" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Supplier_To_Get Lineage Key" DTS:refId="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Set TableName to Supplier_To_Get Lineage Key]" DTS:To="Package\Load Supplier Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{1D8BE4DB-EB6D-4839-9F8A-077DC8E7CD16}" DTS:From="Package\Load Supplier Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Supplier_Staging" DTS:refId="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Supplier_Staging]" DTS:To="Package\Load Supplier Dimension\Truncate Supplier_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{0E4DFEEC-7DE3-4697-9174-5758A15A7139}" DTS:From="Package\Load Supplier Dimension\Truncate Supplier_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Supplier_Staging_To_Get Last Supplier ETL Cutoff Time" DTS:refId="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Truncate Supplier_Staging_To_Get Last Supplier ETL Cutoff Time]" DTS:To="Package\Load Supplier Dimension\Get Last Supplier ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{A556A8B6-BA21-43B0-94AE-8F92D4F800D0}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Transaction Type Dimension" DTS:refId="Package\Load Transaction Type Dimension">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{7D5A223B-199A-4FD4-B6D2-3A5FF162255C}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Transaction Type" DTS:refId="Package\Load Transaction Type Dimension\Set TableName to Transaction Type" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Transaction Type&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{99688724-ED7F-4006-ACCC-286F174CD460}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Transaction Type Dimension\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{9F911C7D-DE4D-422B-8C23-F79ACF313A1C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate TransactionType_Staging" DTS:refId="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.TransactionType_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6D0801F7-8B2F-4E55-B376-043A0AAF3936}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Transaction Type ETL Cutoff Time" DTS:refId="Package\Load Transaction Type Dimension\Get Last Transaction Type ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A560D5A4-C9D4-4C99-B6AD-CEB8B01E9A92}" DTS:From="Package\Load Transaction Type Dimension\Set TableName to Transaction Type" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Transaction Type_To_Get Lineage Key" DTS:refId="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Set TableName to Transaction Type_To_Get Lineage Key]" DTS:To="Package\Load Transaction Type Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{89A8E450-7438-4D5D-82B9-1E9C84D9CDB0}" DTS:From="Package\Load Transaction Type Dimension\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate TransactionType_Staging" DTS:refId="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate TransactionType_Staging]" DTS:To="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{EAEED48B-1EC5-4203-89B7-271548E59D95}" DTS:From="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate TransactionType_Staging_To_Get Last Transaction Type ETL Cutoff Time" DTS:refId="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Truncate TransactionType_Staging_To_Get Last Transaction Type ETL Cutoff Time]" DTS:To="Package\Load Transaction Type Dimension\Get Last Transaction Type ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{40B4A185-E3A2-4B4B-B877-1F4D352BBC0B}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Movement Fact" DTS:refId="Package\Load Movement Fact">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{C119B433-C6F7-4089-8E3E-7FBB711106DC}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Movement" DTS:refId="Package\Load Movement Fact\Set TableName to Movement" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Movement&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{94C63AFB-92C1-422F-93B3-B977510F2B5F}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Movement Fact\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{96F9C0E3-0098-4A9D-A990-57724D81B41E}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Movement_Staging" DTS:refId="Package\Load Movement Fact\Truncate Movement_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Movement_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{8C9E573B-4DAE-42A7-81B3-6C480196742C}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Movement ETL Cutoff Time" DTS:refId="Package\Load Movement Fact\Get Last Movement ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{E1D0DEEA-6E97-488A-8914-78211932F978}" DTS:From="Package\Load Movement Fact\Set TableName to Movement" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Movement_To_Get Lineage Key" DTS:refId="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Set TableName to Movement_To_Get Lineage Key]" DTS:To="Package\Load Movement Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{34383AC7-A12C-4C87-B9C8-D212390E85F6}" DTS:From="Package\Load Movement Fact\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Movement_Staging" DTS:refId="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Movement_Staging]" DTS:To="Package\Load Movement Fact\Truncate Movement_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{5C2BD431-62DA-47AE-8386-AB80B1CB5B28}" DTS:From="Package\Load Movement Fact\Truncate Movement_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Movement_Staging_To_Get Last Movement ETL Cutoff Time" DTS:refId="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Truncate Movement_Staging_To_Get Last Movement ETL Cutoff Time]" DTS:To="Package\Load Movement Fact\Get Last Movement ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{A979DDD7-165D-4E9C-9D92-E49F5C08AED0}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Order Fact" DTS:refId="Package\Load Order Fact">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{9EE8F0DA-2B60-48A3-AB85-4C95C75D30A7}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Order" DTS:refId="Package\Load Order Fact\Set TableName to Order" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Order&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C8F4D26A-EDCA-4FE1-8A6D-A605853FD555}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Order Fact\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{6A0E10AE-87C7-4CE2-8B8B-CF65726AF79E}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Order_Staging" DTS:refId="Package\Load Order Fact\Truncate Order_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Order_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{DE6A30FE-DE5A-4789-83FE-14BAD58435AB}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Order ETL Cutoff Time" DTS:refId="Package\Load Order Fact\Get Last Order ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{4D6105FC-23A3-4C04-B633-81B632E41B01}" DTS:From="Package\Load Order Fact\Set TableName to Order" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Order_To_Get Lineage Key" DTS:refId="Package\Load Order Fact.PrecedenceConstraints[Constraint_Set TableName to Order_To_Get Lineage Key]" DTS:To="Package\Load Order Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{F9DDA2B8-8437-490A-AC09-7656D2D84C04}" DTS:From="Package\Load Order Fact\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Order_Staging" DTS:refId="Package\Load Order Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Order_Staging]" DTS:To="Package\Load Order Fact\Truncate Order_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{9045FF4D-3BA2-456F-BF18-48040F72BFBC}" DTS:From="Package\Load Order Fact\Truncate Order_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Order_Staging_To_Get Last Order ETL Cutoff Time" DTS:refId="Package\Load Order Fact.PrecedenceConstraints[Constraint_Truncate Order_Staging_To_Get Last Order ETL Cutoff Time]" DTS:To="Package\Load Order Fact\Get Last Order ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{EA53CABC-791B-4C2B-8757-077252336D1A}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Purchase Fact" DTS:refId="Package\Load Purchase Fact">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{709F4AB2-22A1-4EF3-9E30-E6D0766DD699}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Purchase" DTS:refId="Package\Load Purchase Fact\Set TableName to Purchase" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Purchase&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{BEF4A2A2-25A7-45F0-8DF1-05E7FA6378BA}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Purchase Fact\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{B029F219-E7DE-4DC6-B8D9-68B33620F91E}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Purchase_Staging" DTS:refId="Package\Load Purchase Fact\Truncate Purchase_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Purchase_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{94AACA50-62F1-4FCE-AE06-44C9014D4FC0}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Purchase ETL Cutoff Time" DTS:refId="Package\Load Purchase Fact\Get Last Purchase ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{1617C867-2768-4218-8253-AC0A713C1068}" DTS:From="Package\Load Purchase Fact\Set TableName to Purchase" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Purchase_To_Get Lineage Key" DTS:refId="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Set TableName to Purchase_To_Get Lineage Key]" DTS:To="Package\Load Purchase Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{78A7918C-07FC-460B-8355-E70EAAF558B6}" DTS:From="Package\Load Purchase Fact\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Purchase_Staging" DTS:refId="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Purchase_Staging]" DTS:To="Package\Load Purchase Fact\Truncate Purchase_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{2112FAE0-277B-44AD-B424-D1848C21CC77}" DTS:From="Package\Load Purchase Fact\Truncate Purchase_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Purchase_Staging_To_Get Last Purchase ETL Cutoff Time" DTS:refId="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Truncate Purchase_Staging_To_Get Last Purchase ETL Cutoff Time]" DTS:To="Package\Load Purchase Fact\Get Last Purchase ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{F45EAD1A-4876-409E-97B2-32E23FA8834C}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Sale Fact" DTS:refId="Package\Load Sale Fact">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{A45A37DF-86AE-45C1-BFB8-AE59D86B1158}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Sale" DTS:refId="Package\Load Sale Fact\Set TableName to Sale" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Sale&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{297C39FB-F26E-4D8A-B78F-0E8156A61C45}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Sale Fact\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{0BEFC5F2-DBAC-41C3-BE54-CD4DE91C2988}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Sale_Staging" DTS:refId="Package\Load Sale Fact\Truncate Sale_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Sale_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{793FA443-5912-40BC-AD36-6A4EE5D3209E}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Sale ETL Cutoff Time" DTS:refId="Package\Load Sale Fact\Get Last Sale ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{70BDCD0C-0DC9-4E92-A979-7D7E39A21CC9}" DTS:From="Package\Load Sale Fact\Set TableName to Sale" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Sale_To_Get Lineage Key" DTS:refId="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Set TableName to Sale_To_Get Lineage Key]" DTS:To="Package\Load Sale Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{63B7A4F5-DA23-44FB-9C42-50D3C7D4040A}" DTS:From="Package\Load Sale Fact\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Sale_Staging" DTS:refId="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Sale_Staging]" DTS:To="Package\Load Sale Fact\Truncate Sale_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{18918C88-071B-4D80-980E-34827FA39827}" DTS:From="Package\Load Sale Fact\Truncate Sale_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Sale_Staging_To_Get Last Sale ETL Cutoff Time" DTS:refId="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Truncate Sale_Staging_To_Get Last Sale ETL Cutoff Time]" DTS:To="Package\Load Sale Fact\Get Last Sale ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{67C35508-0938-4DE3-826B-3E9B358CF726}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Stock Holding Fact" DTS:refId="Package\Load Stock Holding Fact">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{CEE75209-CD20-488B-9507-5AA88EE2BA55}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Stock Holding" DTS:refId="Package\Load Stock Holding Fact\Set TableName to Stock Holding" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Stock Holding&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{9F2BF85A-D1EC-4D25-9C33-6537034C5335}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Stock Holding Fact\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{5A72E56A-503B-4A54-B4A6-256A3FF4D380}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate StockHolding_Staging" DTS:refId="Package\Load Stock Holding Fact\Truncate StockHolding_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.StockHolding_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{A4D71A02-7093-443B-9E45-79291AFAA859}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Stock Holding ETL Cutoff Time" DTS:refId="Package\Load Stock Holding Fact\Get Last Stock Holding ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{B95D036F-6141-4C36-9663-FF5D5ADA9427}" DTS:From="Package\Load Stock Holding Fact\Set TableName to Stock Holding" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Stock Holding_To_Get Lineage Key" DTS:refId="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Set TableName to Stock Holding_To_Get Lineage Key]" DTS:To="Package\Load Stock Holding Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{57336AF6-E907-4A8C-B0F8-C0D5AF5E5659}" DTS:From="Package\Load Stock Holding Fact\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate StockHolding_Staging" DTS:refId="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate StockHolding_Staging]" DTS:To="Package\Load Stock Holding Fact\Truncate StockHolding_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{FB23AC3B-3B4C-43AB-8831-78BEA3FDF417}" DTS:From="Package\Load Stock Holding Fact\Truncate StockHolding_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate StockHolding_Staging_To_Get Last Stock Holding ETL Cutoff Time" DTS:refId="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Truncate StockHolding_Staging_To_Get Last Stock Holding ETL Cutoff Time]" DTS:To="Package\Load Stock Holding Fact\Get Last Stock Holding ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{3BFD7E6A-85A8-4749-A8F1-FA287CD3579B}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Transaction Fact" DTS:refId="Package\Load Transaction Fact">
+      <DTS:Executables>
+        <DTS:Executable DTS:CreationName="Microsoft.ExpressionTask" DTS:DTSID="{891590C8-40C3-4C41-B54D-883B3435CC9D}" DTS:ExecutableType="Microsoft.ExpressionTask" DTS:LocaleID="-1" DTS:ObjectName="Set TableName to Transaction" DTS:refId="Package\Load Transaction Fact\Set TableName to Transaction" DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <ExpressionTask Expression="@[User::TableName] = &quot;Transaction&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{2E531271-4E32-457A-AA67-C1B62758D966}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Lineage Key" DTS:refId="Package\Load Transaction Fact\Get Lineage Key" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding SQLTask:DataType="7" SQLTask:DtsVariableName="User::TargetETLCutoffTime" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="1" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LineageKey" SQLTask:ResultName="LineageKey" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{65E92231-5B79-44AF-A984-D771082AFDE7}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Truncate Transaction_Staging" DTS:refId="Package\Load Transaction Fact\Truncate Transaction_Staging" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:SqlStatementSource="DELETE FROM Integration.Transaction_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable DTS:CreationName="Microsoft.ExecuteSQLTask" DTS:DTSID="{C0582CCF-0CE1-46CA-A06B-4710905FDB08}" DTS:ExecutableType="Microsoft.ExecuteSQLTask" DTS:LocaleID="-1" DTS:ObjectName="Get Last Transaction ETL Cutoff Time" DTS:refId="Package\Load Transaction Fact\Get Last Transaction ETL Cutoff Time" DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData SQLTask:Connection="WWI_DW_Destination_DB" SQLTask:ResultType="ResultSetType_SingleRow" SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding SQLTask:DataType="130" SQLTask:DtsVariableName="User::TableName" SQLTask:ParameterDirection="Input" SQLTask:ParameterName="0" SQLTask:ParameterSize="-1" />
+              <SQLTask:ResultBinding SQLTask:DtsVariableName="User::LastETLCutoffTime" SQLTask:ResultName="CutoffTime" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{75CA9745-F486-4264-BB49-B1C67EA638F8}" DTS:From="Package\Load Transaction Fact\Set TableName to Transaction" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Set TableName to Transaction_To_Get Lineage Key" DTS:refId="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Set TableName to Transaction_To_Get Lineage Key]" DTS:To="Package\Load Transaction Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{8D300043-6196-4D6C-9F3D-655E20A431E9}" DTS:From="Package\Load Transaction Fact\Get Lineage Key" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Transaction_Staging" DTS:refId="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Transaction_Staging]" DTS:To="Package\Load Transaction Fact\Truncate Transaction_Staging" />
+        <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{C62AC21E-365A-4EBB-A675-2FB5DFEBE913}" DTS:From="Package\Load Transaction Fact\Truncate Transaction_Staging" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Truncate Transaction_Staging_To_Get Last Transaction ETL Cutoff Time" DTS:refId="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Truncate Transaction_Staging_To_Get Last Transaction ETL Cutoff Time]" DTS:To="Package\Load Transaction Fact\Get Last Transaction ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{94164C09-F8E5-42B0-99B5-5117F62C2962}" DTS:From="Package\Calculate ETL Cutoff Time backup" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Calculate ETL Cutoff Time backup_To_Trim Any Milliseconds" DTS:refId="Package.PrecedenceConstraints[Constraint_Calculate ETL Cutoff Time backup_To_Trim Any Milliseconds]" DTS:To="Package\Trim Any Milliseconds" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{7AB8D01D-3BEF-461C-93E3-31297ED963D2}" DTS:From="Package\Trim Any Milliseconds" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Trim Any Milliseconds_To_Ensure Date Dimension includes current year" DTS:refId="Package.PrecedenceConstraints[Constraint_Trim Any Milliseconds_To_Ensure Date Dimension includes current year]" DTS:To="Package\Ensure Date Dimension includes current year" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{AD7ABAA5-9817-4B74-AA75-608907D566EE}" DTS:From="Package\Ensure Date Dimension includes current year" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Ensure Date Dimension includes current year_To_Load City Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Ensure Date Dimension includes current year_To_Load City Dimension]" DTS:To="Package\Load City Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{46902EA6-7668-4498-A99D-875F961174B5}" DTS:From="Package\Load City Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load City Dimension_To_Load Customer Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Load City Dimension_To_Load Customer Dimension]" DTS:To="Package\Load Customer Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{090F9566-5321-4B30-9118-B861155E3343}" DTS:From="Package\Load Customer Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Customer Dimension_To_Load Employee Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Customer Dimension_To_Load Employee Dimension]" DTS:To="Package\Load Employee Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{1E02C06B-D590-4443-9438-7AC5F5D898F4}" DTS:From="Package\Load Employee Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Employee Dimension_To_Load Payment Method Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Employee Dimension_To_Load Payment Method Dimension]" DTS:To="Package\Load Payment Method Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{6D212A38-E0A0-425F-85AB-7147C83A1209}" DTS:From="Package\Load Payment Method Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Payment Method Dimension_To_Load Stock Item Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Payment Method Dimension_To_Load Stock Item Dimension]" DTS:To="Package\Load Stock Item Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{CB271F5D-B6BE-480D-BB37-88BDB554BA79}" DTS:From="Package\Load Stock Item Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Stock Item Dimension_To_Load Supplier Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Stock Item Dimension_To_Load Supplier Dimension]" DTS:To="Package\Load Supplier Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{DC28625A-5EB1-4C71-8FFB-8296EA34183A}" DTS:From="Package\Load Supplier Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Supplier Dimension_To_Load Transaction Type Dimension" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Supplier Dimension_To_Load Transaction Type Dimension]" DTS:To="Package\Load Transaction Type Dimension" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{A4BD8F44-89C4-4115-BA0A-EB9BF9C9F42A}" DTS:From="Package\Load Transaction Type Dimension" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Transaction Type Dimension_To_Load Movement Fact" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Transaction Type Dimension_To_Load Movement Fact]" DTS:To="Package\Load Movement Fact" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{F7584353-FFF0-4D51-B193-1E3030CB54F8}" DTS:From="Package\Load Movement Fact" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Movement Fact_To_Load Order Fact" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Movement Fact_To_Load Order Fact]" DTS:To="Package\Load Order Fact" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{82DFD383-E66A-415C-A576-393D67808ADB}" DTS:From="Package\Load Order Fact" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Order Fact_To_Load Purchase Fact" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Order Fact_To_Load Purchase Fact]" DTS:To="Package\Load Purchase Fact" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{85915A8C-9DA6-4126-B57A-A681898CAFDE}" DTS:From="Package\Load Purchase Fact" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Purchase Fact_To_Load Sale Fact" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Purchase Fact_To_Load Sale Fact]" DTS:To="Package\Load Sale Fact" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{BA90318C-F13B-492F-83DA-3E3CD48E1B40}" DTS:From="Package\Load Sale Fact" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Sale Fact_To_Load Stock Holding Fact" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Sale Fact_To_Load Stock Holding Fact]" DTS:To="Package\Load Stock Holding Fact" />
+    <DTS:PrecedenceConstraint DTS:CreationName="" DTS:DTSID="{27ED4080-E308-4A67-A3A1-E8FB96FAE974}" DTS:From="Package\Load Stock Holding Fact" DTS:LogicalAnd="True" DTS:ObjectName="Constraint_Load Stock Holding Fact_To_Load Transaction Fact" DTS:refId="Package.PrecedenceConstraints[Constraint_Load Stock Holding Fact_To_Load Transaction Fact]" DTS:To="Package\Load Transaction Fact" />
+  </DTS:PrecedenceConstraints>
+</DTS:Executable>
