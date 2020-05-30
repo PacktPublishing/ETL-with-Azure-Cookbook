@@ -1,0 +1,27 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#
+    string connectionString = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=BIMLmetadata";
+#>
+    <Packages>
+        <Package Name="Recipe3">
+            <Tasks>
+<#
+    DataTable dtTables = new DataTable();
+    using (SqlConnection sqlConn = new SqlConnection(connectionString))
+    {
+    string sqlCmd = @"SELECT * from dbo.TableConfig;";
+    SqlDataAdapter sqlDtAdp = new SqlDataAdapter(sqlCmd, sqlConn);
+    sqlDtAdp.Fill(dtTables);  
+    }
+       
+    foreach(DataRow drTable in dtTables.Rows) {
+    #>
+        <Container Name="Load <#=drTable["TableName"]#> <#=drTable["TableType"]#>">
+        </Container>
+    <#}#>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>
