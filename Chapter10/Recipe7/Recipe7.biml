@@ -1,0 +1,126 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+<#@ code file="Code.cs" #>    
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#
+    string connectionString = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Integrated Security=SSPI;Initial Catalog=BIMLmetadata";
+    string connectionStringDestination = @"Data Source=ETLInAzureBook\MSSQL2019;Persist Security Info=true;Initial Catalog=WideWorldImportersDW;Integrated Security=SSPI;";
+
+    DataTable dtTables = new DataTable();
+    using (SqlConnection sqlConn = new SqlConnection(connectionString))
+    {
+    string sqlCmd = @"SELECT * from dbo.TableConfig;";
+    SqlDataAdapter sqlDtAdp = new SqlDataAdapter(sqlCmd, sqlConn);
+    sqlDtAdp.Fill(dtTables);  
+    }
+#>
+    <Connections>
+        <Connection Name="WWI_Source_DB" CreateInProject="true" ConnectionString="Data Source=ETLInAzureBook\MSSQL2019;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+        <Connection Name="WWI_DW_Destination_DB" CreateInProject="true" ConnectionString="Data Source=ETLInAzureBook\MSSQL2019;Initial Catalog=WideWorldImportersDW;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+    </Connections>
+    <Packages>
+        <Package Name="Recipe7" ConstraintMode="LinearOnSuccess">
+            <Variables>
+                <Variable Name="LastETLCutoffTime" DataType="DateTime" IncludeInDebugDump="Include">4/11/2016 10:39:10 AM</Variable>
+                <Variable Name="LineageKey" DataType="Int32" IncludeInDebugDump="Include">0</Variable>
+                <Variable Name="TableName" DataType="String" IncludeInDebugDump="Exclude"></Variable>
+                <Variable Name="TargetETLCutoffTime" DataType="DateTime" IncludeInDebugDump="Include">4/13/2016 11:25:23 AM</Variable>
+            </Variables>
+            <Tasks>
+                <Expression Name="Calculate ETL Cutoff Time backup" Expression="@[User::TargetETLCutoffTime] = DATEADD(&quot;Minute&quot;, -5, GETDATE()  )" />
+                <Expression Name="Trim Any Milliseconds" Expression="@[User::TargetETLCutoffTime] = DATEADD(&quot;Millisecond&quot;, 0 - DATEPART(&quot;Millisecond&quot;, @[User::TargetETLCutoffTime]), @[User::TargetETLCutoffTime])" />
+                <ExecuteSQL Name="Ensure Date Dimension includes current year" ConnectionName="WWI_DW_Destination_DB">
+                    <DirectInput>DECLARE @YearNumber int =  YEAR(SYSDATETIME());
+
+EXEC Integration.PopulateDateDimensionForYear @YearNumber;</DirectInput>
+                </ExecuteSQL>
+<#
+    foreach(DataRow drTable in dtTables.Rows) {
+    
+    string strColumnSQL = string.Format(@"SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE, DATETIME_PRECISION 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_SCHEMA = 'Integration' AND TABLE_NAME = '{0}' 
+AND NOT (DATA_TYPE = 'int' AND COLUMN_NAME LIKE '% key')
+AND ORDINAL_POSITION > 1 ORDER BY ORDINAL_POSITION",drTable["StagingTableName"]);
+
+    
+string strResultSet = @"WITH RESULT SETS
+(
+    (";
+	
+    using (SqlConnection sqlConnDest = new SqlConnection(connectionStringDestination))
+    {
+        SqlCommand command = new SqlCommand(strColumnSQL,sqlConnDest);
+        sqlConnDest.Open();
+        SqlDataReader reader = command.ExecuteReader();
+
+        if (reader.HasRows)
+        {
+            while (reader.Read())
+            {
+                strResultSet += @"
+                [" + reader["COLUMN_NAME"] + "] " 
+                + BIMLHelper.GetDataType(reader["DATA_TYPE"].ToString(),reader["CHARACTER_MAXIMUM_LENGTH"].ToString(),reader["NUMERIC_PRECISION"].ToString(),reader["NUMERIC_SCALE"].ToString(),reader["DATETIME_PRECISION"].ToString()) 
+                + @",";
+            }
+        }
+        reader.Close();
+        strResultSet = strResultSet.TrimEnd(',') + @"));
+        ";
+    }
+#>
+        <Container Name="Load <#=drTable["TableName"]#> <#=drTable["TableType"]#>" ConstraintMode="LinearOnSuccess">
+            <Tasks>
+        <Expression Name="Set TableName to <#=drTable["TableName"]#>" Expression="@[User::TableName] = &quot;<#=drTable["TableName"]#>&quot;" />
+            <ExecuteSQL Name="Get Lineage Key" ConnectionName="WWI_DW_Destination_DB" ResultSet="SingleRow">
+                <Results>
+                    <Result Name="LineageKey" VariableName="User.LineageKey" />
+                </Results>
+                <Parameters>
+                    <Parameter Name="0" VariableName="User.TableName" Length="-1" DataType="String" />
+                    <Parameter Name="1" VariableName="User.TargetETLCutoffTime" Length="-1" DataType="Date" />
+                </Parameters>
+                <DirectInput>EXEC Integration.GetLineageKey ?, ?;</DirectInput>
+            </ExecuteSQL>
+            <ExecuteSQL Name="Truncate <#=drTable["StagingTableName"]#>" ConnectionName="WWI_DW_Destination_DB">
+                <DirectInput>DELETE FROM Integration.<#=drTable["StagingTableName"]#>;</DirectInput>
+            </ExecuteSQL>
+            <ExecuteSQL Name="Get Last <#=drTable["TableName"]#> ETL Cutoff Time" ConnectionName="WWI_DW_Destination_DB" ResultSet="SingleRow">
+               <Results>
+                  <Result Name="CutoffTime" VariableName="User.LastETLCutoffTime" />
+               </Results>
+               <Parameters>
+                 <Parameter Name="0" VariableName="User.TableName" Length="-1" DataType="String" />
+                 </Parameters>
+                 <DirectInput>EXEC Integration.GetLastETLCutoffTime ?;</DirectInput>
+            </ExecuteSQL>
+                
+            <Dataflow Name="Extract Updated <#=drTable["TableName"]#> Data to Staging">
+                <Transformations>
+                    <OleDbSource Name="Integration_Get<#=drTable["TableName"]#>Updates" ConnectionName="WWI_Source_DB">
+                        <Parameters>
+                            <Parameter Name="@LastCutoff:Input" VariableName="User.LastETLCutoffTime" />
+                            <Parameter Name="@NewCutoff:Input" VariableName="User.TargetETLCutoffTime" />
+                        </Parameters>
+                        <DirectInput>EXEC Integration.<#=drTable["GetStoredProc"]#> <#if(!drTable["GetStoredProc"].ToString().Equals("GetStockHoldingUpdates")){#>?, ?<#}#>
+
+<#=strResultSet#>
+
+</DirectInput>
+                    </OleDbSource>
+                    <OleDbDestination Name="Integration_<#=drTable["StagingTableName"]#>" ConnectionName="WWI_DW_Destination_DB" TableLock="false">
+                        <ExternalTableOutput Table="[Integration].[<#=drTable["StagingTableName"]#>]" />
+                    </OleDbDestination>
+                </Transformations>
+            </Dataflow>
+            <ExecuteSQL Name="Migrate Staged <#=drTable["TableName"]#> Data" ConnectionName="WWI_DW_Destination_DB">
+                <DirectInput>EXEC Integration.<#=drTable["MigrateStoredProc"]#>;</DirectInput>
+            </ExecuteSQL>
+            </Tasks>
+        </Container>
+        
+    <#}#>
+            </Tasks>
+        </Package>
+    </Packages>
+</Biml>
