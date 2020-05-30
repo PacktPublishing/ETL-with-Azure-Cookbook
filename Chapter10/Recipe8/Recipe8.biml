@@ -1,0 +1,24 @@
+<Biml xmlns="http://schemas.varigence.com/biml.xsd">
+    <DataFactories>
+        <DataFactory Name="ADFCloudETL8">
+			<LinkedServices>
+				<HttpServer Name="LSHTTP" AuthenticationType="Anonymous" Url="https://cadatacatalog.state.gov/"/>
+				<AzureDataLakeStoreGen2 Name="ETLInAzure" AccountKey="xxx" Url="https://etlinazure.dfs.core.windows.net"/>
+            </LinkedServices>
+			<Datasets>
+				<HttpFile Name="DSHTTP" LinkedServiceName="ADFCloudETL8.LSHTTP" RelativeUrl="/dataset/dbadcbe4-3d99-4225-b0e1-5f300f2ccb62/resource/94d1147b-03ad-431a-98ba-71e0f6d8a879/download/geopoliticalregion.json"/>
+				<AzureDataLakeGen2 Name="DSDL2" LinkedServiceName="ADFCloudETL8.ETLInAzure" FolderPath="geo" File="geopoliticalregions.json"></AzureDataLakeGen2>
+            </Datasets>
+			<Pipelines>
+				<Pipeline Name="Copy Political Regions">
+					<Activities>
+						<Copy Name="Copy Regions">
+							<HttpSource DatasetName="ADFCloudETL8.DSHTTP"/>
+							<AzureDataLakeGen2Sink DatasetName="ADFCloudETL8.DSDL2"/>
+                        </Copy>
+                    </Activities>
+                </Pipeline>
+            </Pipelines>
+		</DataFactory>
+    </DataFactories>
+</Biml>
