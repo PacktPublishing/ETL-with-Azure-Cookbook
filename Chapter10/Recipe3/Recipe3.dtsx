@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DTS:Executable DTS:CreationDate="03/28/2020 04:01:59" DTS:CreationName="Microsoft.Package" DTS:CreatorComputerName="ETLInAzureBook" DTS:CreatorName="BookAdmin" DTS:DTSID="{ADACE471-1B7C-464D-941C-DCC69138A86D}" DTS:ExecutableType="Microsoft.Package" DTS:LastModifiedProductVersion="" DTS:LocaleID="1033" DTS:ObjectName="Recipe3" DTS:ProtectionLevel="0" DTS:refId="Package" DTS:VersionBuild="0" DTS:VersionGUID="{0C73551E-9ABF-4219-A1C7-D89A68100B6B}" DTS:VersionMajor="0" xmlns:DTS="www.microsoft.com/SqlServer/Dts">
+  <DTS:Property DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Executables>
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{58E404E2-7119-47B9-9700-5D62B29C5358}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load City Dimension" DTS:refId="Package\Load City Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{BF83837C-EAFD-4BC6-8619-DA935AD5D24B}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Customer Dimension" DTS:refId="Package\Load Customer Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{A66FE8BB-98B5-4E43-8A41-C7323EBB7F8E}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Employee Dimension" DTS:refId="Package\Load Employee Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{D735AFFE-4ED9-447B-83E8-472A51877415}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Payment Method Dimension" DTS:refId="Package\Load Payment Method Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{AF1BC6A5-F4CD-46D2-BBC9-50877368F245}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Stock Item Dimension" DTS:refId="Package\Load Stock Item Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{E1794EA8-6610-41ED-88F7-83CDDA48E377}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Supplier Dimension" DTS:refId="Package\Load Supplier Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{434684C4-234B-4205-A80E-D15833F172F0}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Transaction Type Dimension" DTS:refId="Package\Load Transaction Type Dimension" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{484051A9-5C0D-4796-9120-BD89994E8A03}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Movement Fact" DTS:refId="Package\Load Movement Fact" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{9DCCCF18-7D50-4C33-9D21-7C0F3565CBB9}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Order Fact" DTS:refId="Package\Load Order Fact" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{B767D91E-E959-4F02-9D85-616EBE7A801B}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Purchase Fact" DTS:refId="Package\Load Purchase Fact" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{1BE6289D-1FB9-4D09-86AB-6369649A0713}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Sale Fact" DTS:refId="Package\Load Sale Fact" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{35901403-B20C-40BF-BE8E-1F983C363AD0}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Stock Holding Fact" DTS:refId="Package\Load Stock Holding Fact" />
+    <DTS:Executable DTS:CreationName="STOCK:SEQUENCE" DTS:DTSID="{EB4F8BD0-A083-455E-A6EE-252297E42876}" DTS:ExecutableType="STOCK:SEQUENCE" DTS:LocaleID="-1" DTS:ObjectName="Load Transaction Fact" DTS:refId="Package\Load Transaction Fact" />
+  </DTS:Executables>
+</DTS:Executable>
