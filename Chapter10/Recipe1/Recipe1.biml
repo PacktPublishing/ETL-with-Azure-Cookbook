@@ -4,6 +4,7 @@
 
     foreach(var table in sourceMetadata.TableNodes) {
     #>
-SELECT COUNT(1) FROM [<#=table.#>].[<#=table.Name#>]
+SELECT COUNT(1) FROM [<#=table.Schema#>].[<#=table.Name#>]
 <#}#>
-  
+
+</Biml>  
