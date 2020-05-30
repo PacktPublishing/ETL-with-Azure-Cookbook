@@ -1,0 +1,3271 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="4/5/2020 1:05:25 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="ETLInAzureBook"
+  DTS:CreatorName="BookAdmin"
+  DTS:DTSID="{0A0B8B9A-AD60-420B-B7AF-33909395E3B6}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.71"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Recipe4"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{7D528A7C-580B-4491-9A3B-97D9230C6905}"
+  DTS:VersionMajor="0">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{C10263B1-2AB5-4E1C-A5A9-A9F1BCA6D69F}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="LastETLCutoffTime">
+      <DTS:VariableValue
+        DTS:DataType="7">4/11/2016 10:39:10 AM</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{C725CBBD-A5A6-4D6E-8066-1C8767EAC80B}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="LineageKey">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{56E770D8-7771-4104-A8EE-2C66C0686D91}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="TableName">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{C321E965-45BD-4014-832E-32CA6CD54513}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="TargetETLCutoffTime">
+      <DTS:VariableValue
+        DTS:DataType="7">4/13/2016 11:25:23 AM</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load City Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{698C6FE1-818D-4617-90C2-4744201C151D}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load City Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load City Dimension\Get Last City ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{A9560EC0-CF2F-484C-85E6-AC969007867F}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last City ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load City Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{E92E7535-5F20-471F-87CF-97F13EAF9C12}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load City Dimension\Set TableName to City"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{8219C67E-8D32-4B21-A41B-9297258F3787}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to City"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;City&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load City Dimension\Truncate City_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{71B054CB-8E5A-4085-B42E-405217602772}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate City_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.City_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load City Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate City_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{561F4433-3631-4583-9A73-FFA9471B19F0}"
+          DTS:From="Package\Load City Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate City_Staging"
+          DTS:To="Package\Load City Dimension\Truncate City_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load City Dimension.PrecedenceConstraints[Constraint_Set TableName to City_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{B2FFFE98-0EC4-4919-A3B9-930902CA920D}"
+          DTS:From="Package\Load City Dimension\Set TableName to City"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to City_To_Get Lineage Key"
+          DTS:To="Package\Load City Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load City Dimension.PrecedenceConstraints[Constraint_Truncate City_Staging_To_Get Last City ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{95D71A83-3530-48E9-B78F-4F31EAAC2D28}"
+          DTS:From="Package\Load City Dimension\Truncate City_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate City_Staging_To_Get Last City ETL Cutoff Time"
+          DTS:To="Package\Load City Dimension\Get Last City ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Customer Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{74FFD379-0882-4D7F-BD19-CFC1F6BBE29D}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Customer Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Customer Dimension\Get Last Customer ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{C2A61B59-10A4-4C8F-90A4-BD1DEFBB9CEE}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Customer ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Customer Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{0732F5E7-6FB5-4AF6-A3FF-5778232DA0BE}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Customer Dimension\Set TableName to Customer"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{54C772FE-9ECE-45BC-B085-DD7E5EB95859}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Customer"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Customer&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Customer Dimension\Truncate Customer_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{CB9E8D43-2692-4E4E-B1A6-7D673200D8F7}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Customer_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Customer_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Customer_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{DD791F9A-E56A-4223-9989-5EC4C989545E}"
+          DTS:From="Package\Load Customer Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Customer_Staging"
+          DTS:To="Package\Load Customer Dimension\Truncate Customer_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Set TableName to Customer_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{909628C7-04DB-46EA-BB50-7B809008424A}"
+          DTS:From="Package\Load Customer Dimension\Set TableName to Customer"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Customer_To_Get Lineage Key"
+          DTS:To="Package\Load Customer Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Truncate Customer_Staging_To_Get Last Customer ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{A06912CC-A8C6-4863-88BB-60BAAAEFA73C}"
+          DTS:From="Package\Load Customer Dimension\Truncate Customer_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Customer_Staging_To_Get Last Customer ETL Cutoff Time"
+          DTS:To="Package\Load Customer Dimension\Get Last Customer ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Employee Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{692C7D79-BE52-4F0D-AC69-5F71286DD63F}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Employee Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Employee Dimension\Get Last Employee ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{C85CB732-BA0B-425C-A14E-22600CF23BD6}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Employee ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Employee Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{954D5790-1B39-448B-8E70-2D10AD9E18B3}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Employee Dimension\Set TableName to Employee"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{51A52CF8-F466-4883-A5F6-ED8F8932D408}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Employee"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Employee&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Employee Dimension\Truncate Employee_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{B3511E0A-9B66-48DF-8751-470A05BC6BC7}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Employee_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Employee_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Employee_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{A360714D-8FED-4BF2-A207-662336333158}"
+          DTS:From="Package\Load Employee Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Employee_Staging"
+          DTS:To="Package\Load Employee Dimension\Truncate Employee_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Set TableName to Employee_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{3E33DB6E-B176-44A9-B5B3-C7051022135B}"
+          DTS:From="Package\Load Employee Dimension\Set TableName to Employee"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Employee_To_Get Lineage Key"
+          DTS:To="Package\Load Employee Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Truncate Employee_Staging_To_Get Last Employee ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{C26289D6-BC46-4D7E-B947-CE3B1E0C5F67}"
+          DTS:From="Package\Load Employee Dimension\Truncate Employee_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Employee_Staging_To_Get Last Employee ETL Cutoff Time"
+          DTS:To="Package\Load Employee Dimension\Get Last Employee ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Movement Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{5799F89A-0C0E-4316-A3D2-D28D93D2D353}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Movement Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Movement Fact\Get Last Movement ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{B453C205-AFDA-415F-BB47-6E4FBD225AF1}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Movement ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Movement Fact\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{2A8EF0F8-C3CC-4129-BCB6-47B3A04DB5F3}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Movement Fact\Set TableName to Movement"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{4070B39A-BB99-426F-ACB2-F0CF49A4E01C}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Movement"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Movement&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Movement Fact\Truncate Movement_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{845FB576-3422-4274-B208-D3E05F61EBAD}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Movement_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Movement_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Movement_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{8A52B989-3A2F-49E9-AB2C-20BE1919A608}"
+          DTS:From="Package\Load Movement Fact\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Movement_Staging"
+          DTS:To="Package\Load Movement Fact\Truncate Movement_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Set TableName to Movement_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{C9A4746A-97E8-4E80-8266-5E635C9B4352}"
+          DTS:From="Package\Load Movement Fact\Set TableName to Movement"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Movement_To_Get Lineage Key"
+          DTS:To="Package\Load Movement Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Truncate Movement_Staging_To_Get Last Movement ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{4F6D152A-BB9F-4F1D-9B5E-D5A6FE6378DA}"
+          DTS:From="Package\Load Movement Fact\Truncate Movement_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Movement_Staging_To_Get Last Movement ETL Cutoff Time"
+          DTS:To="Package\Load Movement Fact\Get Last Movement ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Order Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{39F9558A-D824-4BA2-9EC5-404A5C673866}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Order Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Order Fact\Get Last Order ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{345CBA24-33C1-448C-A93D-4633A0C74BD7}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Order ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Order Fact\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{4ADCCD3C-0712-4DA0-96ED-80B044BB2C41}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Order Fact\Set TableName to Order"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{BDB8A3A5-DCA0-4E78-9232-4AB509414FDE}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Order"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Order&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Order Fact\Truncate Order_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{7804A6B0-6266-48E8-B37B-F8D362434185}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Order_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Order_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Order Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Order_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{03E35309-7B81-461C-8073-C47390201729}"
+          DTS:From="Package\Load Order Fact\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Order_Staging"
+          DTS:To="Package\Load Order Fact\Truncate Order_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Order Fact.PrecedenceConstraints[Constraint_Set TableName to Order_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{1DAB5751-52DD-4B50-8EF0-82BBC0011C86}"
+          DTS:From="Package\Load Order Fact\Set TableName to Order"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Order_To_Get Lineage Key"
+          DTS:To="Package\Load Order Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Order Fact.PrecedenceConstraints[Constraint_Truncate Order_Staging_To_Get Last Order ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{6BAA0EE8-C93D-4A52-89FB-94029D830177}"
+          DTS:From="Package\Load Order Fact\Truncate Order_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Order_Staging_To_Get Last Order ETL Cutoff Time"
+          DTS:To="Package\Load Order Fact\Get Last Order ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Payment Method Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{76FA260C-1844-471C-9D4B-32E1EAA1AC79}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Payment Method Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Payment Method Dimension\Get Last Payment Method ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{CC3C9322-2BC4-46DA-8C87-0C4125A01A9A}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Payment Method ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Payment Method Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{BF316F9C-497D-4F1A-83AA-A1E05350B847}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Payment Method Dimension\Set TableName to Payment Method"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{E31B8F86-0733-4E6A-B5F4-30B427E6A67B}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Payment Method"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Payment Method&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{C94462E1-3C3F-4FF2-8681-5CEC384D823E}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate PaymentMethod_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.PaymentMethod_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate PaymentMethod_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{0AB9EA42-3C79-4D92-8DBC-43A753E6E2F8}"
+          DTS:From="Package\Load Payment Method Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate PaymentMethod_Staging"
+          DTS:To="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Set TableName to Payment Method_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{AD9BA876-52C0-465F-943C-458CE606ED0D}"
+          DTS:From="Package\Load Payment Method Dimension\Set TableName to Payment Method"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Payment Method_To_Get Lineage Key"
+          DTS:To="Package\Load Payment Method Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Truncate PaymentMethod_Staging_To_Get Last Payment Method ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{11D9926C-16F1-4E5D-A114-59DE0910DFF2}"
+          DTS:From="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate PaymentMethod_Staging_To_Get Last Payment Method ETL Cutoff Time"
+          DTS:To="Package\Load Payment Method Dimension\Get Last Payment Method ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Purchase Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{A19DE16E-CEB0-4073-BE8C-2494B2225876}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Purchase Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Fact\Get Last Purchase ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{DDA397A1-0AB3-4AD7-96B5-86DE4179C3F5}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Purchase ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Fact\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{6B8754C9-C62F-46CA-8B89-2390828E74E9}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Fact\Set TableName to Purchase"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{C140227A-E7B2-47FF-89C6-1A4AD78A0DEB}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Purchase"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Purchase&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Purchase Fact\Truncate Purchase_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{1AAC0C41-AAD9-43C0-8C3A-647E50422E67}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Purchase_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Purchase_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Purchase_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{A93E5516-5A76-4775-80FA-95F90F3DB444}"
+          DTS:From="Package\Load Purchase Fact\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Purchase_Staging"
+          DTS:To="Package\Load Purchase Fact\Truncate Purchase_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Set TableName to Purchase_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{80EB507A-56EB-41CD-B591-36197F37080F}"
+          DTS:From="Package\Load Purchase Fact\Set TableName to Purchase"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Purchase_To_Get Lineage Key"
+          DTS:To="Package\Load Purchase Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Truncate Purchase_Staging_To_Get Last Purchase ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{A3398541-A39C-461D-9D33-9296434F77A9}"
+          DTS:From="Package\Load Purchase Fact\Truncate Purchase_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Purchase_Staging_To_Get Last Purchase ETL Cutoff Time"
+          DTS:To="Package\Load Purchase Fact\Get Last Purchase ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Sale Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{1DABF5FC-F28E-4139-BAAA-AEECD9142712}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Sale Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Sale Fact\Get Last Sale ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{5FD2901B-0FF8-4E53-BC79-9334C0887A1E}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Sale ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Sale Fact\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{9BCD8761-3884-4A7B-BC99-A958895B9379}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Sale Fact\Set TableName to Sale"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{5E131325-A472-49AE-8306-10191E3E7727}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Sale"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Sale&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Sale Fact\Truncate Sale_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{BB270AE5-28E1-473C-91AD-4C7FABCC5785}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Sale_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Sale_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Sale_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{94B259CD-0DB0-498A-978A-13C60FD97A61}"
+          DTS:From="Package\Load Sale Fact\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Sale_Staging"
+          DTS:To="Package\Load Sale Fact\Truncate Sale_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Set TableName to Sale_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{51808F86-63D4-403C-9C81-AC0626099ADD}"
+          DTS:From="Package\Load Sale Fact\Set TableName to Sale"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Sale_To_Get Lineage Key"
+          DTS:To="Package\Load Sale Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Truncate Sale_Staging_To_Get Last Sale ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{62CEA4C8-6CCC-46CA-862C-8FC48BD90B35}"
+          DTS:From="Package\Load Sale Fact\Truncate Sale_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Sale_Staging_To_Get Last Sale ETL Cutoff Time"
+          DTS:To="Package\Load Sale Fact\Get Last Sale ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Stock Holding Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{BB425673-9AAF-416E-A51D-67FC6E894FE1}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Stock Holding Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Holding Fact\Get Last Stock Holding ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{387DD3A3-12D0-42FE-9545-7B2937E45C5E}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Stock Holding ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Holding Fact\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{DB69A346-3F9A-4807-8F9F-6D771A9D3A25}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Holding Fact\Set TableName to Stock Holding"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{CC90F92D-BE68-42F6-AB03-81C47426AA85}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Stock Holding"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Stock Holding&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Holding Fact\Truncate StockHolding_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{4806EFF0-958A-4759-9447-8888E0A06CE1}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate StockHolding_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.StockHolding_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate StockHolding_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{8AD5834A-AAB8-4171-A720-959A0713E969}"
+          DTS:From="Package\Load Stock Holding Fact\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate StockHolding_Staging"
+          DTS:To="Package\Load Stock Holding Fact\Truncate StockHolding_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Set TableName to Stock Holding_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{749F1F0B-9372-4AD2-9E51-1CB6987B6A91}"
+          DTS:From="Package\Load Stock Holding Fact\Set TableName to Stock Holding"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Stock Holding_To_Get Lineage Key"
+          DTS:To="Package\Load Stock Holding Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Truncate StockHolding_Staging_To_Get Last Stock Holding ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{A3AD3835-11BE-4BF6-A655-7A9A130FF93F}"
+          DTS:From="Package\Load Stock Holding Fact\Truncate StockHolding_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate StockHolding_Staging_To_Get Last Stock Holding ETL Cutoff Time"
+          DTS:To="Package\Load Stock Holding Fact\Get Last Stock Holding ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Stock Item Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{EE2D2B9D-B72E-4334-BC93-DEB1F9D5A263}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Stock Item Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Item Dimension\Get Last Stock Item ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{E3A878B6-40B4-4993-9AB3-AD27EB58394A}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Stock Item ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Item Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{452896A5-609B-41B7-BC6E-41F98C3A272A}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Item Dimension\Set TableName to Stock Item"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{7C20FBBA-0850-4FDE-8E30-3F8F9E3AEB1D}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Stock Item"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Stock Item&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Stock Item Dimension\Truncate StockItem_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{12B39C24-DDBC-41A6-B532-2EF4B4093E5D}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate StockItem_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.StockItem_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate StockItem_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{AAC63C31-5EDF-4845-80F5-39DA7C033A53}"
+          DTS:From="Package\Load Stock Item Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate StockItem_Staging"
+          DTS:To="Package\Load Stock Item Dimension\Truncate StockItem_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Set TableName to Stock Item_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{B219E12C-30C0-40E7-829C-4E9EDCFE7E2D}"
+          DTS:From="Package\Load Stock Item Dimension\Set TableName to Stock Item"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Stock Item_To_Get Lineage Key"
+          DTS:To="Package\Load Stock Item Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Truncate StockItem_Staging_To_Get Last Stock Item ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{CF5CF39C-18F6-4472-9B30-8FCFFD209C92}"
+          DTS:From="Package\Load Stock Item Dimension\Truncate StockItem_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate StockItem_Staging_To_Get Last Stock Item ETL Cutoff Time"
+          DTS:To="Package\Load Stock Item Dimension\Get Last Stock Item ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Supplier Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{D1F3BFCF-D7C7-47CB-AAA0-91EC5D27D134}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Supplier Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Supplier Dimension\Get Last Supplier ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{23832F23-BF0C-44D5-BF72-35EACDD1DCE8}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Supplier ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Supplier Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{70F43B19-8521-40D5-994C-3DF1B2CA6828}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Supplier Dimension\Set TableName to Supplier"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{91E0C150-58A1-4D24-A5B1-F1BAC70C75A3}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Supplier"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Supplier&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Supplier Dimension\Truncate Supplier_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{75D20342-26B8-4B42-B0FF-98807DA7120D}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Supplier_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Supplier_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Supplier_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{ACDE4E41-B87E-46EF-806C-51A29F43332A}"
+          DTS:From="Package\Load Supplier Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Supplier_Staging"
+          DTS:To="Package\Load Supplier Dimension\Truncate Supplier_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Set TableName to Supplier_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{0652667E-412C-407B-B0E7-326D8463077F}"
+          DTS:From="Package\Load Supplier Dimension\Set TableName to Supplier"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Supplier_To_Get Lineage Key"
+          DTS:To="Package\Load Supplier Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Truncate Supplier_Staging_To_Get Last Supplier ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{9EE60CE4-C130-43C7-9456-A07EBEACA1FF}"
+          DTS:From="Package\Load Supplier Dimension\Truncate Supplier_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Supplier_Staging_To_Get Last Supplier ETL Cutoff Time"
+          DTS:To="Package\Load Supplier Dimension\Get Last Supplier ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Transaction Fact"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{2ADD647A-8222-43FD-8B86-90CBFB1E0DB9}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Transaction Fact">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Fact\Get Last Transaction ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{D175F679-E195-4C11-9DB5-47FFA3BC0A63}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Transaction ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Fact\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{428C3A31-253A-450B-8757-E4A9E45CFCD0}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Fact\Set TableName to Transaction"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{940DE5FE-729A-4DF3-81D2-ED851E5FFB50}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Transaction"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Transaction&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Fact\Truncate Transaction_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{AEA05E9D-6A48-486D-ACAF-57691AFDF8AE}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Transaction_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.Transaction_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Transaction_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{5C2B0B83-3A9A-4B1A-9350-48DB8F2C0D86}"
+          DTS:From="Package\Load Transaction Fact\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate Transaction_Staging"
+          DTS:To="Package\Load Transaction Fact\Truncate Transaction_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Set TableName to Transaction_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{1135E0E2-32BA-4C98-ADC7-A7C5A7DCE496}"
+          DTS:From="Package\Load Transaction Fact\Set TableName to Transaction"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Transaction_To_Get Lineage Key"
+          DTS:To="Package\Load Transaction Fact\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Truncate Transaction_Staging_To_Get Last Transaction ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{D315A02E-3BF4-4E85-ACC7-D506F3602FEA}"
+          DTS:From="Package\Load Transaction Fact\Truncate Transaction_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate Transaction_Staging_To_Get Last Transaction ETL Cutoff Time"
+          DTS:To="Package\Load Transaction Fact\Get Last Transaction ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Transaction Type Dimension"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:DTSID="{D41FD8BC-CF53-4308-A05B-29EDBEA1FBD5}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Transaction Type Dimension">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Type Dimension\Get Last Transaction Type ETL Cutoff Time"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{337608BE-7207-41D1-B82E-0CF9DAF51BEF}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Last Transaction Type ETL Cutoff Time"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLastETLCutoffTime ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="CutoffTime"
+                SQLTask:DtsVariableName="User::LastETLCutoffTime" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Type Dimension\Get Lineage Key"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{F46FC5C3-0219-47D9-992A-0BA9C0802FEA}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Lineage Key"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="EXEC Integration.GetLineageKey ?, ?;"
+              SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="LineageKey"
+                SQLTask:DtsVariableName="User::LineageKey" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::TableName"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="130"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::TargetETLCutoffTime"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="7"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Type Dimension\Set TableName to Transaction Type"
+          DTS:CreationName="Microsoft.ExpressionTask"
+          DTS:DTSID="{CA1B453D-798F-4565-886B-96D2C78CFB6E}"
+          DTS:ExecutableType="Microsoft.ExpressionTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Set TableName to Transaction Type"
+          DTS:TaskContact="Expression Task;Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExpressionTask
+              Expression="@[User::TableName] = &quot;Transaction Type&quot;" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:DTSID="{81A3BF44-665D-410A-BC27-C92335636DE6}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate TransactionType_Staging"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2014; © 2014 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{7C3E3ECC-C5AD-4675-9618-FC08465F8BC9}"
+              SQLTask:SqlStatementSource="DELETE FROM Integration.TransactionType_Staging;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate TransactionType_Staging]"
+          DTS:CreationName=""
+          DTS:DTSID="{8C27B1FA-7E0D-4DDA-8EC4-2D6DA6E25878}"
+          DTS:From="Package\Load Transaction Type Dimension\Get Lineage Key"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Get Lineage Key_To_Truncate TransactionType_Staging"
+          DTS:To="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Set TableName to Transaction Type_To_Get Lineage Key]"
+          DTS:CreationName=""
+          DTS:DTSID="{6CF6D6B5-B048-41DD-934C-FA2952CB21E5}"
+          DTS:From="Package\Load Transaction Type Dimension\Set TableName to Transaction Type"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Set TableName to Transaction Type_To_Get Lineage Key"
+          DTS:To="Package\Load Transaction Type Dimension\Get Lineage Key" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Truncate TransactionType_Staging_To_Get Last Transaction Type ETL Cutoff Time]"
+          DTS:CreationName=""
+          DTS:DTSID="{B2BABDC5-FBC2-4D97-BC4B-2CED65884434}"
+          DTS:From="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint_Truncate TransactionType_Staging_To_Get Last Transaction Type ETL Cutoff Time"
+          DTS:To="Package\Load Transaction Type Dimension\Get Last Transaction Type ETL Cutoff Time" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load City Dimension_To_Load Customer Dimension]"
+      DTS:CreationName=""
+      DTS:DTSID="{3CED3217-BDAC-45AF-BA8F-D64C6A33E1E2}"
+      DTS:From="Package\Load City Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load City Dimension_To_Load Customer Dimension"
+      DTS:To="Package\Load Customer Dimension" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Customer Dimension_To_Load Employee Dimension]"
+      DTS:CreationName=""
+      DTS:DTSID="{AC37128D-E745-43A8-9055-D02CB6FBC6F7}"
+      DTS:From="Package\Load Customer Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Customer Dimension_To_Load Employee Dimension"
+      DTS:To="Package\Load Employee Dimension" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Employee Dimension_To_Load Payment Method Dimension]"
+      DTS:CreationName=""
+      DTS:DTSID="{51F7A344-2C4D-4298-850C-CA90D41EFAD7}"
+      DTS:From="Package\Load Employee Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Employee Dimension_To_Load Payment Method Dimension"
+      DTS:To="Package\Load Payment Method Dimension" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Movement Fact_To_Load Order Fact]"
+      DTS:CreationName=""
+      DTS:DTSID="{488CE1E6-3CCB-4231-BE2D-0F591FC6A8FA}"
+      DTS:From="Package\Load Movement Fact"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Movement Fact_To_Load Order Fact"
+      DTS:To="Package\Load Order Fact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Order Fact_To_Load Purchase Fact]"
+      DTS:CreationName=""
+      DTS:DTSID="{6C90184A-9C30-48A9-B1A6-4BF83F337DEF}"
+      DTS:From="Package\Load Order Fact"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Order Fact_To_Load Purchase Fact"
+      DTS:To="Package\Load Purchase Fact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Payment Method Dimension_To_Load Stock Item Dimension]"
+      DTS:CreationName=""
+      DTS:DTSID="{058CCF2B-EEC0-49E6-A021-15F6197AA0E7}"
+      DTS:From="Package\Load Payment Method Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Payment Method Dimension_To_Load Stock Item Dimension"
+      DTS:To="Package\Load Stock Item Dimension" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Purchase Fact_To_Load Sale Fact]"
+      DTS:CreationName=""
+      DTS:DTSID="{D3D6F085-1079-4384-907F-225054C50F70}"
+      DTS:From="Package\Load Purchase Fact"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Purchase Fact_To_Load Sale Fact"
+      DTS:To="Package\Load Sale Fact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Sale Fact_To_Load Stock Holding Fact]"
+      DTS:CreationName=""
+      DTS:DTSID="{40428406-CDDF-4CF9-8B0D-60E252FE41E2}"
+      DTS:From="Package\Load Sale Fact"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Sale Fact_To_Load Stock Holding Fact"
+      DTS:To="Package\Load Stock Holding Fact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Stock Holding Fact_To_Load Transaction Fact]"
+      DTS:CreationName=""
+      DTS:DTSID="{B9106DA4-93FC-4056-8F81-11E465A205E2}"
+      DTS:From="Package\Load Stock Holding Fact"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Stock Holding Fact_To_Load Transaction Fact"
+      DTS:To="Package\Load Transaction Fact" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Stock Item Dimension_To_Load Supplier Dimension]"
+      DTS:CreationName=""
+      DTS:DTSID="{A226597E-F809-4BE3-A70D-2C91F804DC77}"
+      DTS:From="Package\Load Stock Item Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Stock Item Dimension_To_Load Supplier Dimension"
+      DTS:To="Package\Load Supplier Dimension" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Supplier Dimension_To_Load Transaction Type Dimension]"
+      DTS:CreationName=""
+      DTS:DTSID="{272919FC-8ECB-4BA5-B412-E725A34B7FF6}"
+      DTS:From="Package\Load Supplier Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Supplier Dimension_To_Load Transaction Type Dimension"
+      DTS:To="Package\Load Transaction Type Dimension" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint_Load Transaction Type Dimension_To_Load Movement Fact]"
+      DTS:CreationName=""
+      DTS:DTSID="{43631933-F8D4-44A7-A44B-96A0ADC7A609}"
+      DTS:From="Package\Load Transaction Type Dimension"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint_Load Transaction Type Dimension_To_Load Movement Fact"
+      DTS:To="Package\Load Movement Fact" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="128" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="221.333333333334,42.6666666666667"
+          Id="Package\Load City Dimension\Get Last City ETL Cutoff Time"
+          TopLeft="5.50000000000003,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load City Dimension\Get Lineage Key"
+          TopLeft="36.8333333333334,108.166666666667" />
+        <NodeLayout
+          Size="186.666666666667,42.6666666666667"
+          Id="Package\Load City Dimension\Set TableName to City"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="185.333333333334,42.6666666666667"
+          Id="Package\Load City Dimension\Truncate City_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load City Dimension.PrecedenceConstraints[Constraint_Set TableName to City_To_Get Lineage Key]"
+          TopLeft="116.166666666667,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load City Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate City_Staging]"
+          TopLeft="116.166666666667,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load City Dimension.PrecedenceConstraints[Constraint_Truncate City_Staging_To_Get Last City ETL Cutoff Time]"
+          TopLeft="116.166666666667,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="232,411.333333333334"
+          Size="232,454"
+          Id="Package\Load City Dimension"
+          TopLeft="37.5000000000001,10.061403594629" />
+        <NodeLayout
+          Size="249.333333333334,42.6666666666667"
+          Id="Package\Load Customer Dimension\Get Last Customer ETL Cutoff Time"
+          TopLeft="5.50000000000007,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Customer Dimension\Get Lineage Key"
+          TopLeft="50.8333333333334,108.166666666667" />
+        <NodeLayout
+          Size="214.666666666667,42.6666666666667"
+          Id="Package\Load Customer Dimension\Set TableName to Customer"
+          TopLeft="22.8333333333334,5.50000000000004" />
+        <NodeLayout
+          Size="213.333333333334,42.6666666666667"
+          Id="Package\Load Customer Dimension\Truncate Customer_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Set TableName to Customer_To_Get Lineage Key]"
+          TopLeft="130.166666666667,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Customer_Staging]"
+          TopLeft="130.166666666667,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Customer Dimension.PrecedenceConstraints[Constraint_Truncate Customer_Staging_To_Get Last Customer ETL Cutoff Time]"
+          TopLeft="130.166666666667,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="260.666666666667,410.666666666667"
+          Size="260.666666666667,454"
+          Id="Package\Load Customer Dimension"
+          TopLeft="350.249995126079,13.1842009961769" />
+        <NodeLayout
+          Size="250.666666666667,42.6666666666667"
+          Id="Package\Load Employee Dimension\Get Last Employee ETL Cutoff Time"
+          TopLeft="5.50000000000004,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Employee Dimension\Get Lineage Key"
+          TopLeft="51.5,108.166666666667" />
+        <NodeLayout
+          Size="216,42.6666666666667"
+          Id="Package\Load Employee Dimension\Set TableName to Employee"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="214.666666666667,42.6666666666667"
+          Id="Package\Load Employee Dimension\Truncate Employee_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Set TableName to Employee_To_Get Lineage Key]"
+          TopLeft="130.833333333333,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Employee_Staging]"
+          TopLeft="130.833333333333,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Employee Dimension.PrecedenceConstraints[Constraint_Truncate Employee_Staging_To_Get Last Employee ETL Cutoff Time]"
+          TopLeft="130.833333333333,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="261.333333333334,410.666666666667"
+          Size="261.333333333334,454"
+          Id="Package\Load Employee Dimension"
+          TopLeft="725.958322855954,9.46489300578119" />
+        <NodeLayout
+          Size="253.333333333334,42.6666666666667"
+          Id="Package\Load Movement Fact\Get Last Movement ETL Cutoff Time"
+          TopLeft="5.50000000000007,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Movement Fact\Get Lineage Key"
+          TopLeft="52.8333333333334,108.166666666667" />
+        <NodeLayout
+          Size="218.666666666667,42.6666666666667"
+          Id="Package\Load Movement Fact\Set TableName to Movement"
+          TopLeft="22.8333333333334,5.50000000000004" />
+        <NodeLayout
+          Size="216,42.6666666666667"
+          Id="Package\Load Movement Fact\Truncate Movement_Staging"
+          TopLeft="24.1666666666667,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Set TableName to Movement_To_Get Lineage Key]"
+          TopLeft="132.166666666667,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Movement_Staging]"
+          TopLeft="132.166666666667,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Movement Fact.PrecedenceConstraints[Constraint_Truncate Movement_Staging_To_Get Last Movement ETL Cutoff Time]"
+          TopLeft="132.166666666667,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="264.666666666667,411.333333333334"
+          Size="264.666666666667,454"
+          Id="Package\Load Movement Fact"
+          TopLeft="21.1666666666672,3608.06140359463" />
+        <NodeLayout
+          Size="230.666666666667,42.6666666666667"
+          Id="Package\Load Order Fact\Get Last Order ETL Cutoff Time"
+          TopLeft="5.50000000000003,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Order Fact\Get Lineage Key"
+          TopLeft="41.5,108.166666666667" />
+        <NodeLayout
+          Size="196,42.6666666666667"
+          Id="Package\Load Order Fact\Set TableName to Order"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="194.666666666667,42.6666666666667"
+          Id="Package\Load Order Fact\Truncate Order_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Order Fact.PrecedenceConstraints[Constraint_Set TableName to Order_To_Get Lineage Key]"
+          TopLeft="120.833333333333,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Order Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Order_Staging]"
+          TopLeft="120.833333333333,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Order Fact.PrecedenceConstraints[Constraint_Truncate Order_Staging_To_Get Last Order ETL Cutoff Time]"
+          TopLeft="120.833333333333,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="241.333333333334,411.333333333334"
+          Size="241.333333333334,454"
+          Id="Package\Load Order Fact"
+          TopLeft="32.8333333333339,4122.06140359463" />
+        <NodeLayout
+          Size="284,42.6666666666667"
+          Id="Package\Load Payment Method Dimension\Get Last Payment Method ETL Cutoff Time"
+          TopLeft="5.50000000000006,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Payment Method Dimension\Get Lineage Key"
+          TopLeft="68.1666666666667,108.166666666667" />
+        <NodeLayout
+          Size="249.333333333334,42.6666666666667"
+          Id="Package\Load Payment Method Dimension\Set TableName to Payment Method"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="244,42.6666666666667"
+          Id="Package\Load Payment Method Dimension\Truncate PaymentMethod_Staging"
+          TopLeft="25.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Set TableName to Payment Method_To_Get Lineage Key]"
+          TopLeft="147.5,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate PaymentMethod_Staging]"
+          TopLeft="147.5,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Payment Method Dimension.PrecedenceConstraints[Constraint_Truncate PaymentMethod_Staging_To_Get Last Payment Method ETL Cutoff Time]"
+          TopLeft="147.5,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="294.666666666667,410.666666666667"
+          Size="294.666666666667,454"
+          Id="Package\Load Payment Method Dimension"
+          TopLeft="1129.08331660057,17.1490940019579" />
+        <NodeLayout
+          Size="248,42.6666666666667"
+          Id="Package\Load Purchase Fact\Get Last Purchase ETL Cutoff Time"
+          TopLeft="5.50000000000006,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Purchase Fact\Get Lineage Key"
+          TopLeft="50.1666666666667,108.166666666667" />
+        <NodeLayout
+          Size="213.333333333334,42.6666666666667"
+          Id="Package\Load Purchase Fact\Set TableName to Purchase"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="212,42.6666666666667"
+          Id="Package\Load Purchase Fact\Truncate Purchase_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Set TableName to Purchase_To_Get Lineage Key]"
+          TopLeft="129.5,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Purchase_Staging]"
+          TopLeft="129.5,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Purchase Fact.PrecedenceConstraints[Constraint_Truncate Purchase_Staging_To_Get Last Purchase ETL Cutoff Time]"
+          TopLeft="129.5,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="258.666666666667,411.333333333334"
+          Size="258.666666666667,454"
+          Id="Package\Load Purchase Fact"
+          TopLeft="24.1666666666673,4636.06140359463" />
+        <NodeLayout
+          Size="224,42.6666666666667"
+          Id="Package\Load Sale Fact\Get Last Sale ETL Cutoff Time"
+          TopLeft="5.50000000000003,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Sale Fact\Get Lineage Key"
+          TopLeft="38.1666666666667,108.166666666667" />
+        <NodeLayout
+          Size="189.333333333334,42.6666666666667"
+          Id="Package\Load Sale Fact\Set TableName to Sale"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="188,42.6666666666667"
+          Id="Package\Load Sale Fact\Truncate Sale_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Set TableName to Sale_To_Get Lineage Key]"
+          TopLeft="117.5,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Sale_Staging]"
+          TopLeft="117.5,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Sale Fact.PrecedenceConstraints[Constraint_Truncate Sale_Staging_To_Get Last Sale ETL Cutoff Time]"
+          TopLeft="117.5,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="235.333333333334,411.333333333334"
+          Size="235.333333333334,454"
+          Id="Package\Load Sale Fact"
+          TopLeft="35.833333333334,5150.06140359463" />
+        <NodeLayout
+          Size="269.333333333334,42.6666666666667"
+          Id="Package\Load Stock Holding Fact\Get Last Stock Holding ETL Cutoff Time"
+          TopLeft="5.50000000000006,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Stock Holding Fact\Get Lineage Key"
+          TopLeft="60.8333333333334,108.166666666667" />
+        <NodeLayout
+          Size="234.666666666667,42.6666666666667"
+          Id="Package\Load Stock Holding Fact\Set TableName to Stock Holding"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="229.333333333334,42.6666666666667"
+          Id="Package\Load Stock Holding Fact\Truncate StockHolding_Staging"
+          TopLeft="25.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Set TableName to Stock Holding_To_Get Lineage Key]"
+          TopLeft="140.166666666667,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate StockHolding_Staging]"
+          TopLeft="140.166666666667,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Stock Holding Fact.PrecedenceConstraints[Constraint_Truncate StockHolding_Staging_To_Get Last Stock Holding ETL Cutoff Time]"
+          TopLeft="140.166666666667,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="280,411.333333333334"
+          Size="280,454"
+          Id="Package\Load Stock Holding Fact"
+          TopLeft="13.5000000000008,5664.06140359463" />
+        <NodeLayout
+          Size="253.333333333334,42.6666666666667"
+          Id="Package\Load Stock Item Dimension\Get Last Stock Item ETL Cutoff Time"
+          TopLeft="5.50000000000007,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Stock Item Dimension\Get Lineage Key"
+          TopLeft="52.8333333333334,108.166666666667" />
+        <NodeLayout
+          Size="218.666666666667,42.6666666666667"
+          Id="Package\Load Stock Item Dimension\Set TableName to Stock Item"
+          TopLeft="22.8333333333334,5.50000000000004" />
+        <NodeLayout
+          Size="214.666666666667,42.6666666666667"
+          Id="Package\Load Stock Item Dimension\Truncate StockItem_Staging"
+          TopLeft="24.8333333333334,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Set TableName to Stock Item_To_Get Lineage Key]"
+          TopLeft="132.166666666667,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate StockItem_Staging]"
+          TopLeft="132.166666666667,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Stock Item Dimension.PrecedenceConstraints[Constraint_Truncate StockItem_Staging_To_Get Last Stock Item ETL Cutoff Time]"
+          TopLeft="132.166666666667,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="264.666666666667,411.333333333334"
+          Size="264.666666666667,454"
+          Id="Package\Load Stock Item Dimension"
+          TopLeft="21.166666666667,2066.06140359463" />
+        <NodeLayout
+          Size="242.666666666667,42.6666666666667"
+          Id="Package\Load Supplier Dimension\Get Last Supplier ETL Cutoff Time"
+          TopLeft="5.50000000000003,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Supplier Dimension\Get Lineage Key"
+          TopLeft="47.5,108.166666666667" />
+        <NodeLayout
+          Size="208,42.6666666666667"
+          Id="Package\Load Supplier Dimension\Set TableName to Supplier"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="205.333333333334,42.6666666666667"
+          Id="Package\Load Supplier Dimension\Truncate Supplier_Staging"
+          TopLeft="24.1666666666667,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Set TableName to Supplier_To_Get Lineage Key]"
+          TopLeft="126.833333333333,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Supplier_Staging]"
+          TopLeft="126.833333333333,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Supplier Dimension.PrecedenceConstraints[Constraint_Truncate Supplier_Staging_To_Get Last Supplier ETL Cutoff Time]"
+          TopLeft="126.833333333333,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="253.333333333334,411.333333333334"
+          Size="253.333333333334,454"
+          Id="Package\Load Supplier Dimension"
+          TopLeft="26.8333333333337,2580.06140359463" />
+        <NodeLayout
+          Size="258.666666666667,42.6666666666667"
+          Id="Package\Load Transaction Fact\Get Last Transaction ETL Cutoff Time"
+          TopLeft="5.50000000000006,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Transaction Fact\Get Lineage Key"
+          TopLeft="55.5,108.166666666667" />
+        <NodeLayout
+          Size="224,42.6666666666667"
+          Id="Package\Load Transaction Fact\Set TableName to Transaction"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="222.666666666667,42.6666666666667"
+          Id="Package\Load Transaction Fact\Truncate Transaction_Staging"
+          TopLeft="23.5,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Set TableName to Transaction_To_Get Lineage Key]"
+          TopLeft="134.833333333333,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate Transaction_Staging]"
+          TopLeft="134.833333333333,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Transaction Fact.PrecedenceConstraints[Constraint_Truncate Transaction_Staging_To_Get Last Transaction ETL Cutoff Time]"
+          TopLeft="134.833333333333,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="269.333333333334,411.333333333334"
+          Size="269.333333333334,454"
+          Id="Package\Load Transaction Fact"
+          TopLeft="18.8333333333342,6178.06140359463" />
+        <NodeLayout
+          Size="285.333333333334,42.6666666666667"
+          Id="Package\Load Transaction Type Dimension\Get Last Transaction Type ETL Cutoff Time"
+          TopLeft="5.50000000000006,313.5" />
+        <NodeLayout
+          Size="158.666666666667,42.6666666666667"
+          Id="Package\Load Transaction Type Dimension\Get Lineage Key"
+          TopLeft="68.8333333333334,108.166666666667" />
+        <NodeLayout
+          Size="250.666666666667,42.6666666666667"
+          Id="Package\Load Transaction Type Dimension\Set TableName to Transaction Type"
+          TopLeft="22.8333333333333,5.50000000000004" />
+        <NodeLayout
+          Size="246.666666666667,42.6666666666667"
+          Id="Package\Load Transaction Type Dimension\Truncate TransactionType_Staging"
+          TopLeft="24.8333333333334,210.833333333334" />
+        <EdgeLayout
+          Id="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Set TableName to Transaction Type_To_Get Lineage Key]"
+          TopLeft="148.166666666667,48.1666666666667">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Get Lineage Key_To_Truncate TransactionType_Staging]"
+          TopLeft="148.166666666667,150.833333333333">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Load Transaction Type Dimension.PrecedenceConstraints[Constraint_Truncate TransactionType_Staging_To_Get Last Transaction Type ETL Cutoff Time]"
+          TopLeft="148.166666666667,253.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60.0000000000001"
+              Start="0,0"
+              End="0,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="296,411.333333333334"
+          Size="296,454"
+          Id="Package\Load Transaction Type Dimension"
+          TopLeft="5.50000000000045,3094.06140359463" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load City Dimension_To_Load Customer Dimension]"
+          TopLeft="269.5,238.622802295403">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="80.7499951260787,0"
+              Start="0,0"
+              End="73.2499951260787,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="73.2499951260787,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Customer Dimension_To_Load Employee Dimension]"
+          TopLeft="610.916661792745,238.324547000979">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="115.041661063209,0"
+              Start="0,0"
+              End="107.541661063209,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="107.541661063209,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Employee Dimension_To_Load Payment Method Dimension]"
+          TopLeft="987.291656189288,240.30699350387">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="141.791660411283,0"
+              Start="0,0"
+              End="134.291660411283,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="134.291660411283,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Payment Method Dimension_To_Load Stock Item Dimension]"
+          TopLeft="1276.4166499339,471.149094001958">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-1122.9166499339,1594.91230959267"
+              Start="0,0"
+              End="-1122.9166499339,1587.41230959267">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,793.456154796336" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,793.456154796336"
+                    Point2="0,797.456154796336"
+                    Point3="-4,797.456154796336" />
+                  <mssgle:LineSegment
+                    End="-1118.9166499339,797.456154796336" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-1118.9166499339,797.456154796336"
+                    Point2="-1122.9166499339,797.456154796336"
+                    Point3="-1122.9166499339,801.456154796336" />
+                  <mssgle:LineSegment
+                    End="-1122.9166499339,1587.41230959267" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Stock Item Dimension_To_Load Supplier Dimension]"
+          TopLeft="153.5,2520.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Supplier Dimension_To_Load Transaction Type Dimension]"
+          TopLeft="153.5,3034.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Transaction Type Dimension_To_Load Movement Fact]"
+          TopLeft="153.5,3548.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Movement Fact_To_Load Order Fact]"
+          TopLeft="153.500000000001,4062.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Order Fact_To_Load Purchase Fact]"
+          TopLeft="153.500000000001,4576.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Purchase Fact_To_Load Sale Fact]"
+          TopLeft="153.500000000001,5090.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Sale Fact_To_Load Stock Holding Fact]"
+          TopLeft="153.500000000001,5604.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint_Load Stock Holding Fact_To_Load Transaction Fact]"
+          TopLeft="153.500000000001,6118.06140359463">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
