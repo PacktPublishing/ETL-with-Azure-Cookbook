@@ -1,0 +1,7 @@
+C:\ETL-with-Azure\Chapter05\Files\RowHash.dll
+C:\ETL-with-Azure\Chapter05\Files\RowHash.pdb
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Release\RowHash.csprojAssemblyReference.cache
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Release\RowHash.csproj.CoreCompileInputs.cache
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Release\RowHash.csproj.CopyComplete
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Release\RowHash.dll
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Release\RowHash.pdb

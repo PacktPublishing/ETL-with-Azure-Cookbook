@@ -1,0 +1,407 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/25/2020 1:55:07 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DS150"
+  DTS:CreatorName="DS150\ML"
+  DTS:DTSID="{5A59F0CF-14BB-46B5-8800-59EBC268E3AC}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.94"
+  DTS:LocaleID="8192"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="27"
+  DTS:VersionGUID="{3B5B6B68-7FDF-4378-BDC7-CEBF13A989CA}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Extract Data from BDC"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{6D4B7455-956C-46D5-B649-AAE3732C2577}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Extract Data from BDC">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{F4D24DBC-CC05-4BC4-91CE-5A384ADD452C}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Download Unknown People Data (Staging to WideWorldImporters)"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Compute Full Name"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Inputs[Derived Column Input].Columns[FirstName]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="FirstName"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\60:invalid" />
+                        <inputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Inputs[Derived Column Input].Columns[LastName]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="LastName"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\61:invalid" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Output].Columns[FullName]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="50"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Output].Columns[FullName]"
+                          name="FullName"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">(DT_WSTR,50)(#{Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\60:invalid} + " " + #{Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\61:invalid})</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">(DT_WSTR,50)(FirstName + " " + LastName)</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  localeId="1033"
+                  name="Unknown People"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[Application].[UnknownPeople]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Connections[OleDbConnection]"
+                      connectionManagerID="{897113C4-530F-4002-8352-C09E96D40D10}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[WideWorldImporters_Local_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input].Columns[EmailAddress]"
+                          cachedDataType="wstr"
+                          cachedLength="256"
+                          cachedName="EmailAddress"
+                          externalMetadataColumnId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input].ExternalColumns[EmailAddress]"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\62:invalid" />
+                        <inputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input].Columns[FullName]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="FullName"
+                          externalMetadataColumnId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input].ExternalColumns[FullName]"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Output].Columns[FullName]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input].ExternalColumns[FullName]"
+                          dataType="wstr"
+                          length="50"
+                          name="FullName" />
+                        <externalMetadataColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input].ExternalColumns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          name="EmailAddress" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters).Paths[Derived Column Output]"
+                  endId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People.Inputs[OLE DB Destination Input]"
+                  name="Derived Column Output"
+                  startId="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name.Outputs[Derived Column Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Extract Data from BDC\Truncate Unknown People Table (WideWorldImporters)"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{C62A502B-B657-41C0-B31C-587FC2C7CB2D}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Unknown People Table (WideWorldImporters)"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{897113C4-530F-4002-8352-C09E96D40D10}"
+              SQLTask:SqlStatementSource="TRUNCATE TABLE Application.UnknownPeople;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Extract Data from BDC.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{E33DD34E-CCA3-4E4D-9EA5-E0EA01C39BBD}"
+          DTS:From="Package\Extract Data from BDC\Truncate Unknown People Table (WideWorldImporters)"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="403,42"
+          Id="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)"
+          TopLeft="5.50000000000003,107.5" />
+        <NodeLayout
+          Size="350,42"
+          Id="Package\Extract Data from BDC\Truncate Unknown People Table (WideWorldImporters)"
+          TopLeft="32,5.5" />
+        <EdgeLayout
+          Id="Package\Extract Data from BDC.PrecedenceConstraints[Constraint]"
+          TopLeft="207,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="414,205"
+          Size="414,248"
+          Id="Package\Extract Data from BDC"
+          TopLeft="212.5,121.5" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Compute Full Name"
+          TopLeft="356,189.5" />
+        <NodeLayout
+          Size="162,42"
+          Id="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People"
+          TopLeft="363.5,291.5" />
+        <EdgeLayout
+          Id="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters).Paths[Derived Column Output]"
+          TopLeft="444.5,231.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-8,18.25,16,16"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Extract Data from BDC\Download Unknown People Data (Staging to WideWorldImporters)\Unknown People">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

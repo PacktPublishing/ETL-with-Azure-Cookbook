@@ -1,0 +1,15 @@
+C:\Users\ML\source\repos\SSISCustomization\RowHash\bin\Debug\RowHash.dll
+C:\Users\ML\source\repos\SSISCustomization\RowHash\bin\Debug\RowHash.pdb
+C:\Users\ML\source\repos\SSISCustomization\RowHash\bin\Debug\Microsoft.SqlServer.PipelineHost.dll
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Debug\RowHash.csproj.CoreCompileInputs.cache
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Debug\RowHash.csproj.CopyComplete
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Debug\RowHash.dll
+C:\Users\ML\source\repos\SSISCustomization\RowHash\obj\Debug\RowHash.pdb
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\bin\Debug\RowHash.dll
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\bin\Debug\RowHash.pdb
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\bin\Debug\Microsoft.SqlServer.PipelineHost.dll
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\obj\Debug\RowHash.csprojAssemblyReference.cache
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\obj\Debug\RowHash.csproj.CoreCompileInputs.cache
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\obj\Debug\RowHash.csproj.CopyComplete
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\obj\Debug\RowHash.dll
+D:\{Authoring}\SSIS2019Cookbook\Chapter05\Solution\SSISCustomization\RowHash\obj\Debug\RowHash.pdb

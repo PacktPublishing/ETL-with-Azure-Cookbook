@@ -1,0 +1,8 @@
+[ODBC]
+DRIVER=ODBC Driver 17 for SQL Server
+TrustServerCertificate=No
+DATABASE=WideWorldImporters
+WSID=DS150
+APP=Microsoft® Visual Studio®
+Trusted_Connection=Yes
+SERVER=localhost

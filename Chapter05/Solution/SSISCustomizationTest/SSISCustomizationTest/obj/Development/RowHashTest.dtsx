@@ -1,0 +1,2862 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="6/10/2020 9:31:47 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DS150"
+  DTS:CreatorName="DS150\ML"
+  DTS:DTSID="{061323BB-06D1-4C03-ADBB-457F35192CBA}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.121"
+  DTS:LocaleID="8192"
+  DTS:ObjectName="RowHashTest"
+  DTS:PackageType="5"
+  DTS:VersionBuild="57"
+  DTS:VersionGUID="{E350242B-B4C7-44E6-9696-471539EDC58B}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{30734D1F-7B02-4FC1-82F4-24E7E5A9FFE8}"
+      DTS:ObjectName="WideWorldAnalysis_Oledb">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=WideWorldAnalysis;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[WideWorldImporters_Oledb]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{69143B01-A26E-4204-A805-0EC9E7B385D5}"
+      DTS:ObjectName="WideWorldImporters_Oledb">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=WideWorldImporters;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Prologue"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{A0C478D9-F317-4E9B-922D-9AB95A3DAE3E}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Prologue">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Prologue\Truncate Staging Tables"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{0CAE0FF2-5B75-4B04-85AA-29BB96E34059}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate Staging Tables"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{30734D1F-7B02-4FC1-82F4-24E7E5A9FFE8}"
+              SQLTask:SqlStatementSource="TRUNCATE TABLE ETL.PurchaseOrders_New;&#xA;TRUNCATE TABLE ETL.PurchaseOrders_Modified;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Work"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{D397EC5C-4843-4B65-A775-BC70125D15BD}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Work">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Work\Load Modified Data"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{3497E8F5-1E40-48D1-8A48-75CF8A3D2231}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Load Modified Data"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{30734D1F-7B02-4FC1-82F4-24E7E5A9FFE8}"
+              SQLTask:SqlStatementSource="MERGE DW.PurchaseOrders&#xA; USING ETL.PurchaseOrders_Modified&#xA;    ON PurchaseOrders_Modified.PurchaseOrderID = PurchaseOrders.PurchaseOrderID&#xA; WHEN MATCHED&#xA; THEN UPDATE&#xA;  SET PurchaseOrders.PurchaseOrderID = PurchaseOrders_Modified.PurchaseOrderID,&#xA;      PurchaseOrders.SupplierID = PurchaseOrders_Modified.SupplierID,&#xA;      PurchaseOrders.OrderDate = PurchaseOrders_Modified.OrderDate,&#xA;      PurchaseOrders.DeliveryMethodID = PurchaseOrders_Modified.DeliveryMethodID,&#xA;      PurchaseOrders.ContactPersonID = PurchaseOrders_Modified.ContactPersonID,&#xA;      PurchaseOrders.ExpectedDeliveryDate = PurchaseOrders_Modified.ExpectedDeliveryDate,&#xA;      PurchaseOrders.SupplierReference = PurchaseOrders_Modified.SupplierReference,&#xA;      PurchaseOrders.IsOrderFinalized = PurchaseOrders_Modified.IsOrderFinalized,&#xA;      PurchaseOrders.Comments = PurchaseOrders_Modified.Comments,&#xA;      PurchaseOrders.InternalComments = PurchaseOrders_Modified.InternalComments,&#xA;      PurchaseOrders.LastEditedBy = PurchaseOrders_Modified.LastEditedBy,&#xA;      PurchaseOrders.LastEditedWhen = PurchaseOrders_Modified.LastEditedWhen,&#xA;      PurchaseOrders.RowHash = PurchaseOrders_Modified.RowHash;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Work\Load New Data"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{C8E768CD-7036-452B-905A-1AE2405DF6EF}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Load New Data"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Work\Load New Data\New Purchase Orders"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="New Purchase Orders"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[DW].[PurchaseOrders]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Work\Load New Data\New Purchase Orders.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      connectionManagerRefId="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[PurchaseOrderID]"
+                          cachedDataType="i4"
+                          cachedName="PurchaseOrderID"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[PurchaseOrderID]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[SupplierID]"
+                          cachedDataType="i4"
+                          cachedName="SupplierID"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[SupplierID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[SupplierID]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[OrderDate]"
+                          cachedDataType="dbDate"
+                          cachedName="OrderDate"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[OrderDate]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[OrderDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[DeliveryMethodID]"
+                          cachedDataType="i4"
+                          cachedName="DeliveryMethodID"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryMethodID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[DeliveryMethodID]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[ContactPersonID]"
+                          cachedDataType="i4"
+                          cachedName="ContactPersonID"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[ContactPersonID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[ContactPersonID]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[ExpectedDeliveryDate]"
+                          cachedDataType="dbDate"
+                          cachedName="ExpectedDeliveryDate"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[SupplierReference]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="SupplierReference"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[SupplierReference]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[SupplierReference]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[IsOrderFinalized]"
+                          cachedDataType="bool"
+                          cachedName="IsOrderFinalized"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[IsOrderFinalized]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[IsOrderFinalized]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[Comments]"
+                          cachedDataType="nText"
+                          cachedName="Comments"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[Comments]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[Comments]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[InternalComments]"
+                          cachedDataType="nText"
+                          cachedName="InternalComments"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[InternalComments]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[InternalComments]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[LastEditedBy]"
+                          cachedDataType="i4"
+                          cachedName="LastEditedBy"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[LastEditedBy]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[LastEditedWhen]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LastEditedWhen"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[LastEditedWhen]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[LastEditedWhen]" />
+                        <inputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].Columns[RowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="RowHash"
+                          externalMetadataColumnId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[RowHash]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[RowHash]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderID]"
+                          dataType="i4"
+                          name="PurchaseOrderID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[SupplierID]"
+                          dataType="i4"
+                          name="SupplierID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[OrderDate]"
+                          dataType="dbDate"
+                          name="OrderDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryMethodID]"
+                          dataType="i4"
+                          name="DeliveryMethodID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[ContactPersonID]"
+                          dataType="i4"
+                          name="ContactPersonID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          name="ExpectedDeliveryDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          name="SupplierReference" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[IsOrderFinalized]"
+                          dataType="bool"
+                          name="IsOrderFinalized" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[Comments]"
+                          dataType="nText"
+                          name="Comments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[InternalComments]"
+                          dataType="nText"
+                          name="InternalComments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          name="LastEditedWhen"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input].ExternalColumns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          name="RowHash" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load New Data\New Purchase Orders.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\New Purchase Orders.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\New Purchase Orders.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\New Purchase Orders.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load New Data\Staged Purchase Orders"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="Staged Purchase Orders"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[ETL].[PurchaseOrders_New]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Work\Load New Data\Staged Purchase Orders.Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      connectionManagerRefId="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[PurchaseOrderID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[SupplierID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[SupplierID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[SupplierID]"
+                          name="SupplierID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[OrderDate]"
+                          dataType="dbDate"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[OrderDate]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[OrderDate]"
+                          name="OrderDate"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[DeliveryMethodID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[DeliveryMethodID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[DeliveryMethodID]"
+                          name="DeliveryMethodID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[ContactPersonID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[ContactPersonID]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[ContactPersonID]"
+                          name="ContactPersonID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[ExpectedDeliveryDate]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]"
+                          name="ExpectedDeliveryDate"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[SupplierReference]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[SupplierReference]"
+                          length="20"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[SupplierReference]"
+                          name="SupplierReference"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[IsOrderFinalized]"
+                          dataType="bool"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[IsOrderFinalized]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[IsOrderFinalized]"
+                          name="IsOrderFinalized"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[Comments]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[Comments]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[Comments]"
+                          name="Comments"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[InternalComments]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[InternalComments]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[InternalComments]"
+                          name="InternalComments"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          name="LastEditedBy"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[LastEditedWhen]"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[LastEditedWhen]"
+                          name="LastEditedWhen"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[RowHash]"
+                          dataType="bytes"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[RowHash]"
+                          length="20"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].Columns[RowHash]"
+                          name="RowHash"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[PurchaseOrderID]"
+                          dataType="i4"
+                          name="PurchaseOrderID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[SupplierID]"
+                          dataType="i4"
+                          name="SupplierID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[OrderDate]"
+                          dataType="dbDate"
+                          name="OrderDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[DeliveryMethodID]"
+                          dataType="i4"
+                          name="DeliveryMethodID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[ContactPersonID]"
+                          dataType="i4"
+                          name="ContactPersonID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          name="ExpectedDeliveryDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          name="SupplierReference" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[IsOrderFinalized]"
+                          dataType="bool"
+                          name="IsOrderFinalized" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[Comments]"
+                          dataType="nText"
+                          name="Comments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[InternalComments]"
+                          dataType="nText"
+                          name="InternalComments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          name="LastEditedWhen"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output].ExternalColumns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          name="RowHash" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[SupplierID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[SupplierID]"
+                          name="SupplierID" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[OrderDate]"
+                          dataType="dbDate"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[OrderDate]"
+                          name="OrderDate" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[DeliveryMethodID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[DeliveryMethodID]"
+                          name="DeliveryMethodID" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ContactPersonID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ContactPersonID]"
+                          name="ContactPersonID" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ExpectedDeliveryDate]"
+                          name="ExpectedDeliveryDate" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[SupplierReference]"
+                          name="SupplierReference" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[IsOrderFinalized]"
+                          dataType="bool"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[IsOrderFinalized]"
+                          name="IsOrderFinalized" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[Comments]"
+                          dataType="nText"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[Comments]"
+                          name="Comments" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[InternalComments]"
+                          dataType="nText"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[InternalComments]"
+                          name="InternalComments" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          name="LastEditedBy" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[LastEditedWhen]"
+                          name="LastEditedWhen"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[RowHash]"
+                          name="RowHash" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Work\Load New Data.Paths[OLE DB Source Output]"
+                  endId="Package\Work\Load New Data\New Purchase Orders.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Work\Load New Data\Staged Purchase Orders.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Work\Load Staging Tables"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{A0FE2C8D-CEB8-4C6C-A21A-E5ED703A1B4B}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Load Staging Tables"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis)"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="Existing Purchase Orders (WideWorldAnalysis)"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT PurchaseOrders.PurchaseOrderID,
+       PurchaseOrders.RowHash
+  FROM DW.PurchaseOrders
+ORDER BY PurchaseOrders.PurchaseOrderID;</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      connectionManagerRefId="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output]"
+                      isSorted="true"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].ExternalColumns[PurchaseOrderID]"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID"
+                          sortKeyPosition="1"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].Columns[RowHash]"
+                          dataType="bytes"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].ExternalColumns[RowHash]"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].Columns[RowHash]"
+                          name="RowHash"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].ExternalColumns[PurchaseOrderID]"
+                          dataType="i4"
+                          name="PurchaseOrderID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].ExternalColumns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          name="RowHash" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[RowHash]"
+                          name="RowHash" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\Known or Unknown?"
+                  componentClassID="Microsoft.ConditionalSplit"
+                  contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
+                  name="Known or Unknown?"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load Staging Tables\Known or Unknown?.Inputs[Conditional Split Input]"
+                      description="Input to the Conditional Split Transformation"
+                      name="Conditional Split Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Known or Unknown?.Inputs[Conditional Split Input].Columns[ExistingPurchaseOrderID]"
+                          cachedDataType="i4"
+                          cachedName="ExistingPurchaseOrderID"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingPurchaseOrderID]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Unknown]"
+                      description="Output 1 of the Conditional Split Transformation"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      exclusionGroup="1"
+                      name="Unknown"
+                      synchronousInputId="Package\Work\Load Staging Tables\Known or Unknown?.Inputs[Conditional Split Input]"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
+                          name="Expression">[ISNULL](#{Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingPurchaseOrderID]})</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Specifies the friendly version of the expression. This expression version uses column names."
+                          expressionType="Notify"
+                          name="FriendlyExpression">ISNULL(ExistingPurchaseOrderID)</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
+                          name="EvaluationOrder">0</property>
+                      </properties>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Known]"
+                      description="Default Output of the Conditional Split Transformation"
+                      exclusionGroup="1"
+                      name="Known"
+                      synchronousInputId="Package\Work\Load Staging Tables\Known or Unknown?.Inputs[Conditional Split Input]">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          name="IsDefaultOut">true</property>
+                      </properties>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Conditional Split Error Output]"
+                      description="Error Output of the Conditional Split Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Conditional Split Error Output"
+                      synchronousInputId="Package\Work\Load Staging Tables\Known or Unknown?.Inputs[Conditional Split Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\Left Join"
+                  componentClassID="Microsoft.MergeJoin"
+                  contactInfo="Merge Join;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Combine two sorted data flows into one using the FULL, LEFT, or INNER join. We recommend this transformation when data flows can be sorted at their sources."
+                  name="Left Join"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the type of join to perform."
+                      name="JoinType"
+                      typeConverter="JoinType">1</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the number of columns in the ordering key."
+                      name="NumKeyColumns">1</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the null values are treated as equal values."
+                      name="TreatNullsAsEqual">true</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Indicates the requested maximum buffers per input before blocking."
+                      name="MaxBuffersPerInput">5</property>
+                  </properties>
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input]"
+                      hasSideEffects="true"
+                      name="Merge Join Left Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[PurchaseOrderID]"
+                          cachedDataType="i4"
+                          cachedName="PurchaseOrderID"
+                          cachedSortKeyPosition="1"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[PurchaseOrderID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[SupplierID]"
+                          cachedDataType="i4"
+                          cachedName="SupplierID"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[OrderDate]"
+                          cachedDataType="dbDate"
+                          cachedName="OrderDate"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[OrderDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[DeliveryMethodID]"
+                          cachedDataType="i4"
+                          cachedName="DeliveryMethodID"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[DeliveryMethodID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[ContactPersonID]"
+                          cachedDataType="i4"
+                          cachedName="ContactPersonID"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ContactPersonID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[ExpectedDeliveryDate]"
+                          cachedDataType="dbDate"
+                          cachedName="ExpectedDeliveryDate"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[SupplierReference]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="SupplierReference"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierReference]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[IsOrderFinalized]"
+                          cachedDataType="bool"
+                          cachedName="IsOrderFinalized"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[IsOrderFinalized]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[Comments]"
+                          cachedDataType="nText"
+                          cachedName="Comments"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[Comments]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[InternalComments]"
+                          cachedDataType="nText"
+                          cachedName="InternalComments"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[InternalComments]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[LastEditedBy]"
+                          cachedDataType="i4"
+                          cachedName="LastEditedBy"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[LastEditedBy]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[LastEditedWhen]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LastEditedWhen"
+                          cachedScale="7"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[LastEditedWhen]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[_RowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="_RowHash"
+                          lineageId="Package\Work\Load Staging Tables\Row Hash.Outputs[RowHashOutput].Columns[_RowHash]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                    <input
+                      refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Right Input]"
+                      hasSideEffects="true"
+                      name="Merge Join Right Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Right Input].Columns[PurchaseOrderID]"
+                          cachedDataType="i4"
+                          cachedName="PurchaseOrderID"
+                          cachedSortKeyPosition="1"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].Columns[PurchaseOrderID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Right Input].Columns[RowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="RowHash"
+                          lineageId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output].Columns[RowHash]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output]"
+                      isSorted="true"
+                      name="Merge Join Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID"
+                          sortKeyPosition="1">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[PurchaseOrderID]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierID]"
+                          name="SupplierID">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[SupplierID]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[OrderDate]"
+                          dataType="dbDate"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[OrderDate]"
+                          name="OrderDate">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[OrderDate]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[DeliveryMethodID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[DeliveryMethodID]"
+                          name="DeliveryMethodID">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[DeliveryMethodID]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ContactPersonID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ContactPersonID]"
+                          name="ContactPersonID">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[ContactPersonID]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExpectedDeliveryDate]"
+                          name="ExpectedDeliveryDate">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[ExpectedDeliveryDate]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierReference]"
+                          name="SupplierReference">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[SupplierReference]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[IsOrderFinalized]"
+                          dataType="bool"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[IsOrderFinalized]"
+                          name="IsOrderFinalized">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[IsOrderFinalized]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[Comments]"
+                          dataType="nText"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[Comments]"
+                          name="Comments">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[Comments]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[InternalComments]"
+                          dataType="nText"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[InternalComments]"
+                          name="InternalComments">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[InternalComments]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedBy]"
+                          name="LastEditedBy">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[LastEditedBy]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedWhen]"
+                          name="LastEditedWhen"
+                          scale="7">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[LastEditedWhen]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingRowHash]"
+                          dataType="bytes"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingRowHash]"
+                          name="ExistingRowHash">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Right Input].Columns[RowHash]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingPurchaseOrderID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingPurchaseOrderID]"
+                          name="ExistingPurchaseOrderID">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Right Input].Columns[PurchaseOrderID]}</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[RowHash]"
+                          name="RowHash">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.Int32"
+                              description="The input column associated with this output column"
+                              name="InputColumnID">#{Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input].Columns[_RowHash]}</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\Modified or Not Modified?"
+                  componentClassID="Microsoft.ConditionalSplit"
+                  contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
+                  name="Modified or Not Modified?"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input]"
+                      description="Input to the Conditional Split Transformation"
+                      name="Conditional Split Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input].Columns[ExistingRowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="ExistingRowHash"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingRowHash]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input].Columns[RowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="RowHash"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[RowHash]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Not Modified]"
+                      description="Output 1 of the Conditional Split Transformation"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      exclusionGroup="1"
+                      name="Not Modified"
+                      synchronousInputId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input]"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
+                          name="Expression">(DT_NTEXT)#{Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[RowHash]} == (DT_NTEXT)#{Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExistingRowHash]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Specifies the friendly version of the expression. This expression version uses column names."
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_NTEXT)RowHash == (DT_NTEXT)ExistingRowHash</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
+                          name="EvaluationOrder">0</property>
+                      </properties>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Modified]"
+                      description="Default Output of the Conditional Split Transformation"
+                      exclusionGroup="1"
+                      name="Modified"
+                      synchronousInputId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input]">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          name="IsDefaultOut">true</property>
+                      </properties>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Conditional Split Error Output]"
+                      description="Error Output of the Conditional Split Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Conditional Split Error Output"
+                      synchronousInputId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis)"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="Modified Purchase Orders (WideWorldAnalysis)"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[ETL].[PurchaseOrders_Modified]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      connectionManagerRefId="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[PurchaseOrderID]"
+                          cachedDataType="i4"
+                          cachedName="PurchaseOrderID"
+                          cachedSortKeyPosition="1"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[PurchaseOrderID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[SupplierID]"
+                          cachedDataType="i4"
+                          cachedName="SupplierID"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[OrderDate]"
+                          cachedDataType="dbDate"
+                          cachedName="OrderDate"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[OrderDate]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[OrderDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[DeliveryMethodID]"
+                          cachedDataType="i4"
+                          cachedName="DeliveryMethodID"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[DeliveryMethodID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[DeliveryMethodID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[ContactPersonID]"
+                          cachedDataType="i4"
+                          cachedName="ContactPersonID"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ContactPersonID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ContactPersonID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[ExpectedDeliveryDate]"
+                          cachedDataType="dbDate"
+                          cachedName="ExpectedDeliveryDate"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExpectedDeliveryDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[SupplierReference]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="SupplierReference"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierReference]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierReference]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[IsOrderFinalized]"
+                          cachedDataType="bool"
+                          cachedName="IsOrderFinalized"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[IsOrderFinalized]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[IsOrderFinalized]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[Comments]"
+                          cachedDataType="nText"
+                          cachedName="Comments"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[Comments]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[Comments]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[InternalComments]"
+                          cachedDataType="nText"
+                          cachedName="InternalComments"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[InternalComments]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[InternalComments]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[LastEditedBy]"
+                          cachedDataType="i4"
+                          cachedName="LastEditedBy"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedBy]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[LastEditedWhen]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LastEditedWhen"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedWhen]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedWhen]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[RowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="RowHash"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[RowHash]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[RowHash]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderID]"
+                          dataType="i4"
+                          name="PurchaseOrderID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierID]"
+                          dataType="i4"
+                          name="SupplierID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[OrderDate]"
+                          dataType="dbDate"
+                          name="OrderDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[DeliveryMethodID]"
+                          dataType="i4"
+                          name="DeliveryMethodID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ContactPersonID]"
+                          dataType="i4"
+                          name="ContactPersonID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          name="ExpectedDeliveryDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          name="SupplierReference" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[IsOrderFinalized]"
+                          dataType="bool"
+                          name="IsOrderFinalized" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[Comments]"
+                          dataType="nText"
+                          name="Comments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[InternalComments]"
+                          dataType="nText"
+                          name="InternalComments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          name="LastEditedWhen"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          name="RowHash" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis)"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="New Purchase Orders (WideWorldAnalysis)"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[ETL].[PurchaseOrders_New]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      connectionManagerRefId="Package.ConnectionManagers[WideWorldAnalysis_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[PurchaseOrderID]"
+                          cachedDataType="i4"
+                          cachedName="PurchaseOrderID"
+                          cachedSortKeyPosition="1"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[PurchaseOrderID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[SupplierID]"
+                          cachedDataType="i4"
+                          cachedName="SupplierID"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[OrderDate]"
+                          cachedDataType="dbDate"
+                          cachedName="OrderDate"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[OrderDate]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[OrderDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[DeliveryMethodID]"
+                          cachedDataType="i4"
+                          cachedName="DeliveryMethodID"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[DeliveryMethodID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[DeliveryMethodID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[ContactPersonID]"
+                          cachedDataType="i4"
+                          cachedName="ContactPersonID"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ContactPersonID]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ContactPersonID]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[ExpectedDeliveryDate]"
+                          cachedDataType="dbDate"
+                          cachedName="ExpectedDeliveryDate"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[ExpectedDeliveryDate]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[SupplierReference]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="SupplierReference"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierReference]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[SupplierReference]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[IsOrderFinalized]"
+                          cachedDataType="bool"
+                          cachedName="IsOrderFinalized"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[IsOrderFinalized]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[IsOrderFinalized]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[Comments]"
+                          cachedDataType="nText"
+                          cachedName="Comments"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[Comments]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[Comments]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[InternalComments]"
+                          cachedDataType="nText"
+                          cachedName="InternalComments"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[InternalComments]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[InternalComments]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[LastEditedBy]"
+                          cachedDataType="i4"
+                          cachedName="LastEditedBy"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedBy]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[LastEditedWhen]"
+                          cachedDataType="dbTimeStamp2"
+                          cachedName="LastEditedWhen"
+                          cachedScale="7"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedWhen]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[LastEditedWhen]" />
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].Columns[RowHash]"
+                          cachedDataType="bytes"
+                          cachedLength="20"
+                          cachedName="RowHash"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[RowHash]"
+                          lineageId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output].Columns[RowHash]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderID]"
+                          dataType="i4"
+                          name="PurchaseOrderID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierID]"
+                          dataType="i4"
+                          name="SupplierID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[OrderDate]"
+                          dataType="dbDate"
+                          name="OrderDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[DeliveryMethodID]"
+                          dataType="i4"
+                          name="DeliveryMethodID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ContactPersonID]"
+                          dataType="i4"
+                          name="ContactPersonID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          name="ExpectedDeliveryDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          name="SupplierReference" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[IsOrderFinalized]"
+                          dataType="bool"
+                          name="IsOrderFinalized" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[Comments]"
+                          dataType="nText"
+                          name="Comments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[InternalComments]"
+                          dataType="nText"
+                          name="InternalComments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          name="LastEditedWhen"
+                          scale="7" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input].ExternalColumns[RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          name="RowHash" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\Row Hash"
+                  componentClassID="Microsoft.ManagedComponentHost"
+                  description="Generates a hash of selected columns in the pipeline row."
+                  name="Row Hash"
+                  version="2">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      name="UserComponentTypeName">EtlWithAzure.RowHashTransformation, RowHash, Version=1.0.0.0, Culture=neutral, PublicKeyToken=20d9fc209869a9f3</property>
+                  </properties>
+                  <inputs>
+                    <input
+                      refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput]"
+                      name="RowHashInput">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[SupplierID]"
+                          cachedDataType="i4"
+                          cachedName="SupplierID"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierID]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">216</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[OrderDate]"
+                          cachedDataType="dbDate"
+                          cachedName="OrderDate"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[OrderDate]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">217</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[DeliveryMethodID]"
+                          cachedDataType="i4"
+                          cachedName="DeliveryMethodID"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[DeliveryMethodID]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">218</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[ContactPersonID]"
+                          cachedDataType="i4"
+                          cachedName="ContactPersonID"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ContactPersonID]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">219</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[ExpectedDeliveryDate]"
+                          cachedDataType="dbDate"
+                          cachedName="ExpectedDeliveryDate"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">220</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[SupplierReference]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="SupplierReference"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierReference]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">221</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[IsOrderFinalized]"
+                          cachedDataType="bool"
+                          cachedName="IsOrderFinalized"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[IsOrderFinalized]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">222</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[Comments]"
+                          cachedDataType="nText"
+                          cachedName="Comments"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[Comments]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">223</property>
+                          </properties>
+                        </inputColumn>
+                        <inputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput].Columns[InternalComments]"
+                          cachedDataType="nText"
+                          cachedName="InternalComments"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[InternalComments]">
+                          <properties>
+                            <property
+                              dataType="System.Int32"
+                              name="Ordinal"
+                              typeConverter="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">224</property>
+                          </properties>
+                        </inputColumn>
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Row Hash.Outputs[RowHashOutput]"
+                      name="RowHashOutput"
+                      synchronousInputId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput]">
+                      <properties>
+                        <property
+                          dataType="System.Boolean"
+                          name="IsInternal"
+                          typeConverter="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">true</property>
+                      </properties>
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Row Hash.Outputs[RowHashOutput].Columns[_RowHash]"
+                          dataType="bytes"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Row Hash.Outputs[RowHashOutput].Columns[_RowHash]"
+                          name="_RowHash">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              name="IsInternal"
+                              typeConverter="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">true</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters)"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="Source Purchase Orders (WideWorldImporters)"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT PurchaseOrders.PurchaseOrderID,
+       PurchaseOrders.SupplierID,
+       PurchaseOrders.OrderDate,
+       PurchaseOrders.DeliveryMethodID,
+       PurchaseOrders.ContactPersonID,
+       PurchaseOrders.ExpectedDeliveryDate,
+       PurchaseOrders.SupplierReference,
+       PurchaseOrders.IsOrderFinalized,
+       PurchaseOrders.Comments,
+       PurchaseOrders.InternalComments,
+       PurchaseOrders.LastEditedBy,
+       PurchaseOrders.LastEditedWhen
+  FROM Purchasing.PurchaseOrders
+ORDER BY PurchaseOrders.PurchaseOrderID;</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Connections[OleDbConnection]"
+                      connectionManagerID="Package.ConnectionManagers[WideWorldImporters_Oledb]"
+                      connectionManagerRefId="Package.ConnectionManagers[WideWorldImporters_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output]"
+                      isSorted="true"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[PurchaseOrderID]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID"
+                          sortKeyPosition="1"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[SupplierID]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierID]"
+                          name="SupplierID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[OrderDate]"
+                          dataType="dbDate"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[OrderDate]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[OrderDate]"
+                          name="OrderDate"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[DeliveryMethodID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[DeliveryMethodID]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[DeliveryMethodID]"
+                          name="DeliveryMethodID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ContactPersonID]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[ContactPersonID]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ContactPersonID]"
+                          name="ContactPersonID"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[ExpectedDeliveryDate]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]"
+                          name="ExpectedDeliveryDate"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierReference]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[SupplierReference]"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[SupplierReference]"
+                          name="SupplierReference"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[IsOrderFinalized]"
+                          dataType="bool"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[IsOrderFinalized]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[IsOrderFinalized]"
+                          name="IsOrderFinalized"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[Comments]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[Comments]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[Comments]"
+                          name="Comments"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[InternalComments]"
+                          dataType="nText"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[InternalComments]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[InternalComments]"
+                          name="InternalComments"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[LastEditedBy]"
+                          name="LastEditedBy"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[LastEditedWhen]"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].Columns[LastEditedWhen]"
+                          name="LastEditedWhen"
+                          scale="7"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[PurchaseOrderID]"
+                          dataType="i4"
+                          name="PurchaseOrderID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[SupplierID]"
+                          dataType="i4"
+                          name="SupplierID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[OrderDate]"
+                          dataType="dbDate"
+                          name="OrderDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[DeliveryMethodID]"
+                          dataType="i4"
+                          name="DeliveryMethodID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[ContactPersonID]"
+                          dataType="i4"
+                          name="ContactPersonID" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          name="ExpectedDeliveryDate" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          name="SupplierReference" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[IsOrderFinalized]"
+                          dataType="bool"
+                          name="IsOrderFinalized" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[Comments]"
+                          dataType="nText"
+                          name="Comments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[InternalComments]"
+                          dataType="nText"
+                          name="InternalComments" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[LastEditedBy]"
+                          dataType="i4"
+                          name="LastEditedBy" />
+                        <externalMetadataColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          name="LastEditedWhen"
+                          scale="7" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[PurchaseOrderID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[PurchaseOrderID]"
+                          name="PurchaseOrderID" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[SupplierID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[SupplierID]"
+                          name="SupplierID" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[OrderDate]"
+                          dataType="dbDate"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[OrderDate]"
+                          name="OrderDate" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[DeliveryMethodID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[DeliveryMethodID]"
+                          name="DeliveryMethodID" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ContactPersonID]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ContactPersonID]"
+                          name="ContactPersonID" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ExpectedDeliveryDate]"
+                          dataType="dbDate"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ExpectedDeliveryDate]"
+                          name="ExpectedDeliveryDate" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[SupplierReference]"
+                          dataType="wstr"
+                          length="20"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[SupplierReference]"
+                          name="SupplierReference" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[IsOrderFinalized]"
+                          dataType="bool"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[IsOrderFinalized]"
+                          name="IsOrderFinalized" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[Comments]"
+                          dataType="nText"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[Comments]"
+                          name="Comments" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[InternalComments]"
+                          dataType="nText"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[InternalComments]"
+                          name="InternalComments" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[LastEditedBy]"
+                          name="LastEditedBy" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[LastEditedWhen]"
+                          dataType="dbTimeStamp2"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[LastEditedWhen]"
+                          name="LastEditedWhen"
+                          scale="7" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[Known]"
+                  endId="Package\Work\Load Staging Tables\Modified or Not Modified?.Inputs[Conditional Split Input]"
+                  name="Known"
+                  startId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Known]" />
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[Merge Join Output]"
+                  endId="Package\Work\Load Staging Tables\Known or Unknown?.Inputs[Conditional Split Input]"
+                  name="Merge Join Output"
+                  startId="Package\Work\Load Staging Tables\Left Join.Outputs[Merge Join Output]" />
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[Modified]"
+                  endId="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input]"
+                  name="Modified"
+                  startId="Package\Work\Load Staging Tables\Modified or Not Modified?.Outputs[Modified]" />
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[OLE DB Source Output]"
+                  endId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Right Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis).Outputs[OLE DB Source Output]" />
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[OLE DB Source Output1]"
+                  endId="Package\Work\Load Staging Tables\Row Hash.Inputs[RowHashInput]"
+                  name="OLE DB Source Output"
+                  startId="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters).Outputs[OLE DB Source Output]" />
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[RowHashOutput]"
+                  endId="Package\Work\Load Staging Tables\Left Join.Inputs[Merge Join Left Input]"
+                  name="RowHashOutput"
+                  startId="Package\Work\Load Staging Tables\Row Hash.Outputs[RowHashOutput]" />
+                <path
+                  refId="Package\Work\Load Staging Tables.Paths[Unknown]"
+                  endId="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis).Inputs[OLE DB Destination Input]"
+                  name="Unknown"
+                  startId="Package\Work\Load Staging Tables\Known or Unknown?.Outputs[Unknown]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Work.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{1DBA7EFA-DD57-4A81-BDDE-68B8DE8542B8}"
+          DTS:From="Package\Work\Load Staging Tables"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Work\Load New Data" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Work.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{E28CE59C-076E-4AAF-9E51-697D950441A6}"
+          DTS:From="Package\Work\Load New Data"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\Work\Load Modified Data" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{16123B3B-4143-4724-9B0B-6BD810ED3BAA}"
+      DTS:From="Package\Prologue"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Work" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="199,42"
+          Id="Package\Prologue\Truncate Staging Tables"
+          TopLeft="5.5,5.5" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="210,103"
+          Size="210,146"
+          Id="Package\Prologue"
+          TopLeft="389.5,78.5" />
+        <NodeLayout
+          Size="174,42"
+          Id="Package\Work\Load Modified Data"
+          TopLeft="8.50000000000003,209.5" />
+        <NodeLayout
+          Size="155,42"
+          Id="Package\Work\Load New Data"
+          TopLeft="18,107.5" />
+        <NodeLayout
+          Size="180,42"
+          Id="Package\Work\Load Staging Tables"
+          TopLeft="5.50000000000001,5.5" />
+        <EdgeLayout
+          Id="Package\Work.PrecedenceConstraints[Constraint]"
+          TopLeft="95.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work.PrecedenceConstraints[Constraint 1]"
+          TopLeft="95.5,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="191,307"
+          Size="191,350"
+          Id="Package\Work"
+          TopLeft="399,284.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="494.5,224.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Work\Load New Data">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="200,42"
+          Id="Package\Work\Load New Data\Staged Purchase Orders"
+          TopLeft="5.50000000000001,5.5" />
+        <NodeLayout
+          Size="187,42"
+          Id="Package\Work\Load New Data\New Purchase Orders"
+          TopLeft="12,107.5" />
+        <EdgeLayout
+          Id="Package\Work\Load New Data.Paths[OLE DB Source Output]"
+          TopLeft="105.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Work\Load New Data\New Purchase Orders">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Work\Load New Data\Staged Purchase Orders">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Work\Load Staging Tables">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="312,42"
+          Id="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis)"
+          TopLeft="304.5,515.5" />
+        <NodeLayout
+          Size="310,42"
+          Id="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters)"
+          TopLeft="305.5,5.5" />
+        <NodeLayout
+          Size="292,42"
+          Id="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis)"
+          TopLeft="5.50000000000006,413.5" />
+        <NodeLayout
+          Size="180,42"
+          Id="Package\Work\Load Staging Tables\Known or Unknown?"
+          TopLeft="370.5,311.5" />
+        <NodeLayout
+          Size="204,42"
+          Id="Package\Work\Load Staging Tables\Modified or Not Modified?"
+          TopLeft="358.5,413.5" />
+        <NodeLayout
+          Size="309,42"
+          Id="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis)"
+          TopLeft="26,107.5" />
+        <NodeLayout
+          Size="121,42"
+          Id="Package\Work\Load Staging Tables\Left Join"
+          TopLeft="400,209.5" />
+        <NodeLayout
+          Size="130,42"
+          Id="Package\Work\Load Staging Tables\Row Hash"
+          TopLeft="395.5,107.5" />
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[Unknown]"
+          TopLeft="431.833333333333,353.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-280.333333333333,60"
+              Start="0,0"
+              End="-280.333333333333,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.3171806167401" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.3171806167401"
+                    Point2="0,24.3171806167401"
+                    Point3="-4,24.3171806167401" />
+                  <mssgle:LineSegment
+                    End="-276.333333333333,24.3171806167401" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-276.333333333333,24.3171806167401"
+                    Point2="-280.333333333333,24.3171806167401"
+                    Point3="-280.333333333333,28.3171806167401" />
+                  <mssgle:LineSegment
+                    End="-280.333333333333,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-161.092545572917,29.3171806167401,41.8517578125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[RowHashOutput]"
+          TopLeft="460.5,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="18.8333333333333,60"
+              Start="0,0"
+              End="18.8333333333333,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31.5301794453507" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,31.5301794453507"
+                    Point2="0,35.5301794453507"
+                    Point3="4,35.5301794453507" />
+                  <mssgle:LineSegment
+                    End="14.8333333333333,35.5301794453507" />
+                  <mssgle:CubicBezierSegment
+                    Point1="14.8333333333333,35.5301794453507"
+                    Point2="18.8333333333333,35.5301794453507"
+                    Point3="18.8333333333333,39.5301794453507" />
+                  <mssgle:LineSegment
+                    End="18.8333333333333,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[OLE DB Source Output1]"
+          TopLeft="460.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[OLE DB Source Output]"
+          TopLeft="180.5,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="261.166666666667,60"
+              Start="0,0"
+              End="261.166666666667,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31.5301794453507" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,31.5301794453507"
+                    Point2="0,35.5301794453507"
+                    Point3="4,35.5301794453507" />
+                  <mssgle:LineSegment
+                    End="257.166666666667,35.5301794453507" />
+                  <mssgle:CubicBezierSegment
+                    Point1="257.166666666667,35.5301794453507"
+                    Point2="261.166666666667,35.5301794453507"
+                    Point3="261.166666666667,39.5301794453507" />
+                  <mssgle:LineSegment
+                    End="261.166666666667,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[Modified]"
+          TopLeft="460.5,455.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-18.90798828125,21.35107421875,37.8159765625,9.7978515625"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[Merge Join Output]"
+          TopLeft="460.5,251.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Work\Load Staging Tables.Paths[Known]"
+          TopLeft="489.166666666667,353.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-28.6666666666666,60"
+              Start="0,0"
+              End="-28.6666666666666,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,20.3171806167401" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,20.3171806167401"
+                    Point2="0,24.3171806167401"
+                    Point3="-4,24.3171806167401" />
+                  <mssgle:LineSegment
+                    End="-24.6666666666666,24.3171806167401" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-24.6666666666666,24.3171806167401"
+                    Point2="-28.6666666666666,24.3171806167401"
+                    Point3="-28.6666666666666,28.3171806167401" />
+                  <mssgle:LineSegment
+                    End="-28.6666666666666,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-29.5952669270833,29.3171806167401,30.5238671875,9.421875"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Work\Load Staging Tables\Modified Purchase Orders (WideWorldAnalysis)">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Work\Load Staging Tables\Source Purchase Orders (WideWorldImporters)">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Work\Load Staging Tables\New Purchase Orders (WideWorldAnalysis)">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Work\Load Staging Tables\Existing Purchase Orders (WideWorldAnalysis)">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
