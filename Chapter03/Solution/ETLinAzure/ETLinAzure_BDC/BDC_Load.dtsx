@@ -1,0 +1,1516 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/24/2020 5:46:50 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DS150"
+  DTS:CreatorName="DS150\ML"
+  DTS:DTSID="{3DB249BB-7F56-4382-B436-15620BF99B3A}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.94"
+  DTS:LocaleID="8192"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="62"
+  DTS:VersionGUID="{AB6A1E56-324A-4C15-9C96-A47143643A93}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[NewPeopleFlatFile]"
+      DTS:CreationName="FLATFILE"
+      DTS:DTSID="{2A322B69-189F-407D-A8AD-B5283FAA4781}"
+      DTS:ObjectName="NewPeopleFlatFile">
+      <DTS:PropertyExpression
+        DTS:Name="ConnectionString">@[$Package::NewPeopleFlatFilePath]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:Format="Delimited"
+          DTS:LocaleID="1033"
+          DTS:HeaderRowDelimiter="_x000D__x000A_"
+          DTS:ColumnNamesInFirstDataRow="True"
+          DTS:RowDelimiter=""
+          DTS:TextQualifier="_x0022_"
+          DTS:CodePage="65001"
+          DTS:ConnectionString="C:\ETL-with-Azure\Chapter03\Files\NewPeople.csv">
+          <DTS:FlatFileColumns>
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="130"
+              DTS:ObjectName="FirstName"
+              DTS:DTSID="{BA366883-F9B7-4349-86CB-3ECA2FC4F5AF}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x002C_"
+              DTS:MaximumWidth="50"
+              DTS:DataType="130"
+              DTS:ObjectName="LastName"
+              DTS:DTSID="{A6049C7C-651D-42C6-BCE9-8D1E6A78B541}"
+              DTS:CreationName="" />
+            <DTS:FlatFileColumn
+              DTS:ColumnType="Delimited"
+              DTS:ColumnDelimiter="_x000D__x000A_"
+              DTS:MaximumWidth="256"
+              DTS:DataType="130"
+              DTS:ObjectName="EmailAddress"
+              DTS:DTSID="{7F91C753-0992-42C2-8526-708F8BDE099A}"
+              DTS:CreationName="" />
+          </DTS:FlatFileColumns>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{211445B7-6CE2-4AC1-8333-777CB2FA4D7A}"
+      DTS:ObjectName="HDFSGatewayAddress"
+      DTS:Sensitive="True">
+      <DTS:Property
+        DTS:Name="ParameterValue">
+        <DTS:Property
+          DTS:DataType="8"
+          DTS:Name="ParameterValue"
+          Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA7y4MHewu5k2l+PGrpEF98QAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAC7+fnzXSxoHqu3y8qEC+dSd5cAYb8/sFyo84Oog1NJvgAAAAAOgAAAAAIAACAAAABdfERl3/K1ZpOZqlokYGvAYDyZ0bmUD9kvVynMBQ8RRjAAAACAAH7+o5cxHUjIgAeUm3CjjF8vaUKRwvg/Jpoe6pYgKq5KIyTAeO6gjWZPTUpnbEdAAAAAxDroYeRFj8EVkxdUAAIa3PNN+Kzxrca23r1FDifgCKgcBlUFiEYXLQa2KwEnD8CUUDjypkuis4s9Qkr6i7/gcQ</DTS:Property>
+      </DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{4B79C773-8031-492E-8C9D-E02CA4F56705}"
+      DTS:ObjectName="HDFSRootPassword"
+      DTS:Sensitive="True">
+      <DTS:Property
+        DTS:Name="ParameterValue">
+        <DTS:Property
+          DTS:DataType="8"
+          DTS:Name="ParameterValue"
+          Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA7y4MHewu5k2l+PGrpEF98QAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACiCaUU1I7xKSFRImsXxARMnZdObcPXxqgnv6KmKvOj7AAAAAAOgAAAAAIAACAAAAAckm6DT89FR91/Y1tYps+1lvPIl2XSIcO3U1FAhFWBviAAAAB3/I+cZS6ThrjYgHHHECwu4yXtbbjW4hXz4x/CXvbV1EAAAADMLQDnqdtvbkhRiVzntOPz3BiHH/hnBZF9WpNDFJFRt4orvlRg6SG7U7o6HtRPWI4/2hyDyft95z13Q9KyYz7k</DTS:Property>
+      </DTS:Property>
+    </DTS:PackageParameter>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{8C4D4F29-9E35-4F8D-81AC-8E4B41D215FA}"
+      DTS:ObjectName="NewPeopleFlatFilePath">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">C:\ETL-with-Azure\Chapter03\Files\NewPeople.csv</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{3EEA151D-1BD0-41A7-8F57-D2D958DBE331}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="CurlCliArguments">
+      <DTS:VariableValue
+        DTS:DataType="8">--help</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{7B98F8E7-B30A-4092-A3B8-7AB309618E40}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="CurlCliArgumentsPattern">
+      <DTS:VariableValue
+        DTS:DataType="8">-i -L -k -u root:{0} -X PUT "https://{1}/gateway/default/webhdfs/v1/NewPeople/NewPeople.csv?op=create&amp;overwrite=true" -H "Content-Type: application/octet-stream" -T "{2}"</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Load Reference Data into Remote Database"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{D4E872AA-32DE-4A38-B368-91ECD4F6FA54}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Reference Data into Remote Database">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Load Reference Data into Remote Database\Remove Existing Data (Staging)"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{7644E43E-AD7B-431F-AEA3-D091C7A896EE}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Remove Existing Data (Staging)"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{B34C9451-9BB4-45B2-BC16-10296E19952F}"
+              SQLTask:SqlStatementSource="TRUNCATE TABLE dbo.ExistingPeople;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{FF75577C-345B-4744-A965-92AA36991FB9}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Upload Existing People (WideWorldImporters to Staging)"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging)"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  localeId="1033"
+                  name="New Existing People (Staging)"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[ExistingPeople]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Connections[OleDbConnection]"
+                      connectionManagerID="{B34C9451-9BB4-45B2-BC16-10296E19952F}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[Staging_BDC_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Inputs[OLE DB Destination Input].Columns[EmailAddress]"
+                          cachedDataType="wstr"
+                          cachedLength="256"
+                          cachedName="EmailAddress"
+                          externalMetadataColumnId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Inputs[OLE DB Destination Input].ExternalColumns[EmailAddress]"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output].Columns[EmailAddress]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Inputs[OLE DB Destination Input].ExternalColumns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          name="EmailAddress" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters)"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  localeId="1033"
+                  name="Source Existing People (WideWorldImporters)"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT DISTINCT People.EmailAddress AS EmailAddress
+  FROM Application.People
+ WHERE (People.EmailAddress IS NOT NULL);</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Connections[OleDbConnection]"
+                      connectionManagerID="{897113C4-530F-4002-8352-C09E96D40D10}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[WideWorldImporters_Local_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output].Columns[EmailAddress]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[EmailAddress]"
+                          length="256"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output].Columns[EmailAddress]"
+                          name="EmailAddress"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output].ExternalColumns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          name="EmailAddress" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[EmailAddress]"
+                          name="EmailAddress" />
+                        <outputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging).Paths[OLE DB Source Output]"
+                  endId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging).Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters).Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Load Reference Data into Remote Database.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{3479811A-E4D3-4113-870F-70E8824A78F5}"
+          DTS:From="Package\Load Reference Data into Remote Database\Remove Existing Data (Staging)"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Simulate Loading Source Data into BDC"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{E9168A0A-0D60-4BC4-81C1-588B351F0680}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Simulate Loading Source Data into BDC">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Simulate Loading Source Data into BDC\Prepare curl CLI"
+          DTS:CreationName="Microsoft.ScriptTask"
+          DTS:Description="Script Task"
+          DTS:DTSID="{289E4661-45AE-4ED3-8320-93C09DCFE8C2}"
+          DTS:ExecutableType="Microsoft.ScriptTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Prepare curl CLI"
+          DTS:ThreadHint="1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ScriptProject
+              Name="ST_db6a9e08aa274ce99c30ca190447f71e"
+              VSTAMajorVersion="15"
+              VSTAMinorVersion="0"
+              Language="CSharp"
+              ReadOnlyVariables="User::CurlCliArgumentsPattern,$Package::HDFSGatewayAddress,$Package::HDFSRootPassword,$Package::NewPeopleFlatFilePath"
+              ReadWriteVariables="User::CurlCliArguments">
+              <ProjectItem
+                Name="Properties\AssemblyInfo.cs"
+                Encoding="UTF8"><![CDATA[using System.Reflection;
+using System.Runtime.CompilerServices;
+
+//
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+//
+[assembly: AssemblyTitle("ST_db6a9e08aa274ce99c30ca190447f71e")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ST_db6a9e08aa274ce99c30ca190447f71e")]
+[assembly: AssemblyCopyright("Copyright @  2020")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+//
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Revision and Build Numbers 
+// by using the '*' as shown below:
+
+[assembly: AssemblyVersion("1.0.*")]]]></ProjectItem>
+              <ProjectItem
+                Name="Properties\Resources.resx"
+                Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+</root>]]></ProjectItem>
+              <ProjectItem
+                Name="ST_db6a9e08aa274ce99c30ca190447f71e.csproj"
+                Encoding="UTF8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectTypeGuids>{30D016F9-3734-4E33-A861-5E7D899E18F3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{a1e4a8f4-e07f-4679-8092-e8f3ebdd8b0e}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ST_db6a9e08aa274ce99c30ca190447f71e</RootNamespace>
+    <AssemblyName>ST_db6a9e08aa274ce99c30ca190447f71e</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ResolveAssemblyReferenceIgnoreTargetFrameworkAttributeVersionMismatch>true</ResolveAssemblyReferenceIgnoreTargetFrameworkAttributeVersionMismatch>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>.\bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>.\bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.SqlServer.ManagedDTS, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+    <Reference Include="Microsoft.SqlServer.ScriptTask, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ScriptMain.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <!-- Include the build rules for a C# project.-->
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{30D016F9-3734-4E33-A861-5E7D899E18F3}">
+        <ProjectProperties HostName="ScriptTask" HostPackage="{B3A685AA-7EAF-4BC6-9940-57959FA5AC07}" ApplicationType="usd" Language="cs" TemplatesPath="" DebugInfoCommandLine="" DebugInfoWorkingDir="" IconImageList="" />
+        <Host Name="ScriptTask" GeneratedNamespace="$safeprojectname" IconIndex=""></Host>
+        <ProjectClient>
+          <HostIdentifier>SSIS_ST150</HostIdentifier>
+        </ProjectClient>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>]]></ProjectItem>
+              <ProjectItem
+                Name="ScriptMain.cs"
+                Encoding="UTF8"><![CDATA[#region Help:  Introduction to the script task
+/* The Script Task allows you to perform virtually any operation that can be accomplished in
+ * a .Net application within the context of an Integration Services control flow. 
+ * 
+ * Expand the other regions which have "Help" prefixes for examples of specific ways to use
+ * Integration Services features within this script task. */
+#endregion
+
+
+#region Namespaces
+using System;
+using System.Data;
+using Microsoft.SqlServer.Dts.Runtime;
+using System.Windows.Forms;
+#endregion
+
+namespace ST_db6a9e08aa274ce99c30ca190447f71e
+{
+    /// <summary>
+    /// ScriptMain is the entry point class of the script.  Do not change the name, attributes,
+    /// or parent of this class.
+    /// </summary>
+	[Microsoft.SqlServer.Dts.Tasks.ScriptTask.SSISScriptTaskEntryPointAttribute]
+	public partial class ScriptMain : Microsoft.SqlServer.Dts.Tasks.ScriptTask.VSTARTScriptObjectModelBase
+	{
+		/// <summary>
+        /// This method is called when this script task executes in the control flow.
+        /// Before returning from this method, set the value of Dts.TaskResult to indicate success or failure.
+        /// To open Help, press F1.
+        /// </summary>
+		public void Main()
+		{
+            String curlCliArgumentsPattern = Dts.Variables["User::CurlCliArgumentsPattern"].Value.ToString();
+            String targetGatewayPassword = Dts.Variables["$Package::HDFSRootPassword"].GetSensitiveValue().ToString();
+            String targetGatewayUrl = Dts.Variables["$Package::HDFSGatewayAddress"].GetSensitiveValue().ToString();
+            String newPeopleFlatFilePath = Dts.Variables["$Package::NewPeopleFlatFilePath"].Value.ToString();
+
+            String curlCliArguments = String.Format(curlCliArgumentsPattern, targetGatewayPassword, targetGatewayUrl, newPeopleFlatFilePath);
+            Dts.Variables["User::CurlCliArguments"].Value = curlCliArguments;
+
+            Dts.TaskResult = (int)ScriptResults.Success;
+		}
+
+        #region ScriptResults declaration
+        /// <summary>
+        /// This enum provides a convenient shorthand within the scope of this class for setting the
+        /// result of the script.
+        /// 
+        /// This code was generated automatically.
+        /// </summary>
+        enum ScriptResults
+        {
+            Success = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Success,
+            Failure = Microsoft.SqlServer.Dts.Runtime.DTSExecResult.Failure
+        };
+        #endregion
+
+	}
+}]]></ProjectItem>
+              <ProjectItem
+                Name="Project"
+                Encoding="UTF16LE"><![CDATA[<?xml version="1.0" encoding="UTF-16" standalone="yes"?>
+<c:Project xmlns:c="http://schemas.microsoft.com/codeprojectml/2010/08/main" xmlns:msb="http://schemas.microsoft.com/developer/msbuild/2003" runtimeVersion="4.0" schemaVersion="1.0">
+  <msb:PropertyGroup>
+    <msb:CodeName>ST_db6a9e08aa274ce99c30ca190447f71e</msb:CodeName>
+    <msb:Language>msBuild</msb:Language>
+    <msb:DisplayName>ST_db6a9e08aa274ce99c30ca190447f71e</msb:DisplayName>
+    <msb:ProjectId>{211676D4-2B14-41C2-A935-A719987CE268}</msb:ProjectId>
+  </msb:PropertyGroup>
+  <msb:ItemGroup>
+    <msb:Project Include="ST_db6a9e08aa274ce99c30ca190447f71e.csproj" />
+    <msb:File Include="Properties\Settings.settings" />
+    <msb:File Include="Properties\AssemblyInfo.cs" />
+    <msb:File Include="Properties\Resources.resx" />
+    <msb:File Include="Properties\Resources.Designer.cs" />
+    <msb:File Include="Properties\Settings.Designer.cs" />
+    <msb:File Include="ScriptMain.cs" />
+  </msb:ItemGroup>
+</c:Project>]]></ProjectItem>
+              <ProjectItem
+                Name="Properties\Settings.Designer.cs"
+                Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_db6a9e08aa274ce99c30ca190447f71e.Properties.Settings.get_Default():ST_db6a9e08aa274ce99c30ca190447f71e.Properties.Sett" +
+    "ings")]
+
+namespace ST_db6a9e08aa274ce99c30ca190447f71e.Properties {
+    
+    
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
+        [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+        private static Settings defaultInstance = new Settings();
+        
+        public static Settings Default {
+            get {
+                return defaultInstance;
+            }
+        }
+    }
+}]]></ProjectItem>
+              <ProjectItem
+                Name="Properties\Settings.settings"
+                Encoding="UTF8"><![CDATA[<?xml version='1.0' encoding='iso-8859-1'?>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+</SettingsFile>]]></ProjectItem>
+              <ProjectItem
+                Name="Properties\Resources.Designer.cs"
+                Encoding="UTF8"><![CDATA[//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_db6a9e08aa274ce99c30ca190447f71e.Properties.Resources.get_ResourceManager():System.Resources.Resou" +
+    "rceManager")]
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_db6a9e08aa274ce99c30ca190447f71e.Properties.Resources.get_Culture():System.Globalization.CultureIn" +
+    "fo")]
+[assembly: global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="ST_db6a9e08aa274ce99c30ca190447f71e.Properties.Resources.set_Culture(System.Globalization.CultureInfo" +
+    "):Void")]
+
+namespace ST_db6a9e08aa274ce99c30ca190447f71e.Properties {
+    
+    
+    /// <summary>
+    ///   A strongly-typed resource class, for looking up localized strings, etc.
+    /// </summary>
+    // This class was auto-generated by the StronglyTypedResourceBuilder
+    // class via a tool like ResGen or Visual Studio.
+    // To add or remove a member, edit your .ResX file then rerun ResGen
+    // with the /str option, or rebuild your VS project.
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+    internal class Resources {
+        
+        private static global::System.Resources.ResourceManager resourceMan;
+        
+        private static global::System.Globalization.CultureInfo resourceCulture;
+        
+        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        internal Resources() {
+        }
+        
+        /// <summary>
+        ///   Returns the cached ResourceManager instance used by this class.
+        /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if ((resourceMan == null)) {
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ST_db6a9e08aa274ce99c30ca190447f71e.Properties.Resources", typeof(Resources).Assembly);
+                    resourceMan = temp;
+                }
+                return resourceMan;
+            }
+        }
+        
+        /// <summary>
+        ///   Overrides the current thread's CurrentUICulture property for all
+        ///   resource lookups using this strongly typed resource class.
+        /// </summary>
+        [global::System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
+                return resourceCulture;
+            }
+            set {
+                resourceCulture = value;
+            }
+        }
+    }
+}]]></ProjectItem>
+              <BinaryItem
+                Name="ST_db6a9e08aa274ce99c30ca190447f71e.dll">TVqQAAMAAAAEAAAA//8AALgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAgAAAAA4fug4AtAnNIbgBTM0hVGhpcyBwcm9ncmFtIGNhbm5vdCBiZSBydW4gaW4gRE9TIG1v
+ZGUuDQ0KJAAAAAAAAABQRQAATAEDAODUz14AAAAAAAAAAOAAIiALATAAABAAAAAIAAAAAAAAUi8A
+AAAgAAAAQAAAAAAAEAAgAAAAAgAABAAAAAAAAAAGAAAAAAAAAACAAAAAAgAAAAAAAAMAYIUAABAA
+ABAAAAAAEAAAEAAAAAAAABAAAAAAAAAAAAAAAAAvAABPAAAAAEAAAHgEAAAAAAAAAAAAAAAAAAAA
+AAAAAGAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAIAAACAAAAAAAAAAAAAAACCAAAEgAAAAAAAAAAAAAAC50ZXh0AAAAWA8AAAAgAAAAEAAAAAIA
+AAAAAAAAAAAAAAAAACAAAGAucnNyYwAAAHgEAAAAQAAAAAYAAAASAAAAAAAAAAAAAAAAAABAAABA
+LnJlbG9jAAAMAAAAAGAAAAACAAAAGAAAAAAAAAAAAAAAAAAAQAAAQgAAAAAAAAAAAAAAAAAAAAA0
+LwAAAAAAAEgAAAACAAUAdCEAANQMAAABAAAAAAAAAEguAAC4AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAABMwBACwAAAAAQAAEQIoEAAACm8RAAAKcgEAAHBvEgAACm8T
+AAAKbxQAAAoCKBAAAApvEQAACnI9AABwbxIAAApvFQAACm8UAAAKCgIoEAAACm8RAAAKcnMAAHBv
+EgAACm8VAAAKbxQAAAoLAigQAAAKbxEAAApyrQAAcG8SAAAKbxMAAApvFAAACgwGBwgoFgAACg0C
+KBAAAApvEQAACnLtAABwbxIAAAoJbxcAAAoCKBAAAAoWbxgAAAoqHgIoGQAACioeAigaAAAKKq5+
+AQAABC0echsBAHDQAwAAAigbAAAKbxwAAApzHQAACoABAAAEfgEAAAQqGn4CAAAEKh4CgAIAAAQq
+Gn4DAAAEKh4CKB4AAAoqLnMIAAAGgAMAAAQqAABCU0pCAQABAAAAAAAMAAAAdjQuMC4zMDMxOQAA
+AAAFAGwAAADUAwAAI34AAEAEAACABQAAI1N0cmluZ3MAAAAAwAkAAJABAAAjVVMAUAsAABAAAAAj
+R1VJRAAAAGALAAB0AQAAI0Jsb2IAAAAAAAAAAgAAAVcdogEJAwAAAPoBMwAWAAABAAAAHgAAAAUA
+AAAGAAAACQAAAAEAAAAeAAAAAgAAABAAAAABAAAAAgAAAAMAAAAEAAAAAQAAAAQAAAABAAAAAQAA
+AAAAkQMBAAAAAAAGACUCYQQGALQCYQQGAHEBTgQPANUEAAAGAJ4BDwQGAAgCDwQGAOkBDwQGAJsC
+DwQGAEUCDwQGAF4CDwQGALUBDwQGANAB/gIKAHkCQAMKAPAAQAMGAMkDwgMGAFQBTgQGAE8FwgMG
+ADEEgQQGACEE+gMOACQBewMOAIUBewMOAAwB5QMGADkBYQQKAGkDQAMSABcFmwASAG4AmwAGABoD
+wgMGALsAwgMGAHcAwgMGAHUFDwQAAAAAAQAAAAAAAQABAAEAEADaAzoAOQABAAEAAAAQAIgE5ARF
+AAEAAwAAARAAIQXkBFkAAwAHAAMBAAA6BQAAPQAEAAoAEQDOA3YAEQDgAHoAEQBeAH4ABgYpAIIA
+VoAqBYUAVoDAAIUAUCAAAAAAhgDgAwYAAQAMIQAAAACGGEEEBgABABQhAAAAAIMYQQQGAAEAHCEA
+AAAAkwgtBIkAAQBIIQAAAACTCMgAjgABAE8hAAAAAJMI1ACTAAEAVyEAAAAAlghWBZkAAgBeIQAA
+AACGGEEEBgACAGYhAAAAAJEYRwSeAAIAAAABAPgCCQBBBAEAEQBBBAYAGQBBBAoAKQBBBBAAMQBB
+BBAAOQBBBBAAQQBBBBAASQBBBBAAUQBBBBAAWQBBBBAAYQBBBBAAaQBBBAYAgQBBBAYAqQBBBBUA
+uQBBBAYAcQAyBSIAwQATBScAyQC5AywA0QDSAjIAiQAYAzYA0QDmAjIA2QBIBToA0QDcAkIAwQBi
+BQEAcQBBBAYAiQBBBAYA4QCJAEcA4QBxBU4AkQBBBFMAsQBBBAYACAAUAGwACAAYAHEAKQBzANkA
+LgALALEALgATALoALgAbANkALgAjAOIALgArAAsBLgAzAAsBLgA7AAsBLgBDAOIALgBLABEBLgBT
+AAsBLgBbACgBQwBjAHEASQBzANkAYQB7AHEAYwBrAHEAGwADAAEABAADAAAAMQSiAAAA6ACnAAAA
+WgWsAAIABAADAAIABQAFAAEABgAFAAIABwAHAASAAAABAAAAHR0AeQAAAAAAADoAAAAEAAAAAAAA
+AAAAAABaADEAAAAAAA8AAAAAAAAAAAAAAGMAIQMAAAAABAAAAAAAAAAAAAAAWgDCAwAAAAAPAAAA
+AAAAAAAAAABjAAoAAAAAAAAAAAABAAAAkgQAAAUAAgAAAAA8TW9kdWxlPgBNaWNyb3NvZnQuU3Fs
+U2VydmVyLk1hbmFnZWREVFMAdmFsdWVfXwBtc2NvcmxpYgBTVF9kYjZhOWUwOGFhMjc0Y2U5OWMz
+MGNhMTkwNDQ3ZjcxZQBkZWZhdWx0SW5zdGFuY2UAVmFyaWFibGUAUnVudGltZVR5cGVIYW5kbGUA
+R2V0VHlwZUZyb21IYW5kbGUATWljcm9zb2Z0LlNxbFNlcnZlci5EdHMuUnVudGltZQBUeXBlAEZh
+aWx1cmUAZ2V0X0N1bHR1cmUAc2V0X0N1bHR1cmUAcmVzb3VyY2VDdWx0dXJlAFZTVEFSVFNjcmlw
+dE9iamVjdE1vZGVsQmFzZQBBcHBsaWNhdGlvblNldHRpbmdzQmFzZQBFZGl0b3JCcm93c2FibGVT
+dGF0ZQBDb21waWxlckdlbmVyYXRlZEF0dHJpYnV0ZQBEZWJ1Z2dlck5vblVzZXJDb2RlQXR0cmli
+dXRlAERlYnVnZ2FibGVBdHRyaWJ1dGUARWRpdG9yQnJvd3NhYmxlQXR0cmlidXRlAEFzc2VtYmx5
+VGl0bGVBdHRyaWJ1dGUAQXNzZW1ibHlUcmFkZW1hcmtBdHRyaWJ1dGUAVGFyZ2V0RnJhbWV3b3Jr
+QXR0cmlidXRlAEFzc2VtYmx5Q29uZmlndXJhdGlvbkF0dHJpYnV0ZQBBc3NlbWJseURlc2NyaXB0
+aW9uQXR0cmlidXRlAENvbXBpbGF0aW9uUmVsYXhhdGlvbnNBdHRyaWJ1dGUAQXNzZW1ibHlQcm9k
+dWN0QXR0cmlidXRlAEFzc2VtYmx5Q29weXJpZ2h0QXR0cmlidXRlAFNTSVNTY3JpcHRUYXNrRW50
+cnlQb2ludEF0dHJpYnV0ZQBBc3NlbWJseUNvbXBhbnlBdHRyaWJ1dGUAUnVudGltZUNvbXBhdGli
+aWxpdHlBdHRyaWJ1dGUAZ2V0X1ZhbHVlAHNldF9WYWx1ZQBHZXRTZW5zaXRpdmVWYWx1ZQB2YWx1
+ZQBTeXN0ZW0uUnVudGltZS5WZXJzaW9uaW5nAFRvU3RyaW5nAE1pY3Jvc29mdC5TcWxTZXJ2ZXIu
+U2NyaXB0VGFzawBNaWNyb3NvZnQuU3FsU2VydmVyLkR0cy5UYXNrcy5TY3JpcHRUYXNrAFNjcmlw
+dE9iamVjdE1vZGVsAFN5c3RlbS5Db21wb25lbnRNb2RlbABTVF9kYjZhOWUwOGFhMjc0Y2U5OWMz
+MGNhMTkwNDQ3ZjcxZS5kbGwAZ2V0X0l0ZW0AU3lzdGVtAEVudW0AcmVzb3VyY2VNYW4AU2NyaXB0
+TWFpbgBTeXN0ZW0uQ29uZmlndXJhdGlvbgBTeXN0ZW0uR2xvYmFsaXphdGlvbgBTeXN0ZW0uUmVm
+bGVjdGlvbgBDdWx0dXJlSW5mbwBnZXRfUmVzb3VyY2VNYW5hZ2VyAC5jdG9yAC5jY3RvcgBTeXN0
+ZW0uRGlhZ25vc3RpY3MAU3lzdGVtLlJ1bnRpbWUuQ29tcGlsZXJTZXJ2aWNlcwBTeXN0ZW0uUmVz
+b3VyY2VzAFNUX2RiNmE5ZTA4YWEyNzRjZTk5YzMwY2ExOTA0NDdmNzFlLlByb3BlcnRpZXMuUmVz
+b3VyY2VzLnJlc291cmNlcwBEZWJ1Z2dpbmdNb2RlcwBTVF9kYjZhOWUwOGFhMjc0Y2U5OWMzMGNh
+MTkwNDQ3ZjcxZS5Qcm9wZXJ0aWVzAGdldF9WYXJpYWJsZXMAU2V0dGluZ3MAU3VjY2VzcwBnZXRf
+RHRzAFNjcmlwdFJlc3VsdHMARm9ybWF0AE9iamVjdABnZXRfRGVmYXVsdABzZXRfVGFza1Jlc3Vs
+dABnZXRfQXNzZW1ibHkAAAAAO1UAcwBlAHIAOgA6AEMAdQByAGwAQwBsAGkAQQByAGcAdQBtAGUA
+bgB0AHMAUABhAHQAdABlAHIAbgAANSQAUABhAGMAawBhAGcAZQA6ADoASABEAEYAUwBSAG8AbwB0
+AFAAYQBzAHMAdwBvAHIAZAAAOSQAUABhAGMAawBhAGcAZQA6ADoASABEAEYAUwBHAGEAdABlAHcA
+YQB5AEEAZABkAHIAZQBzAHMAAD8kAFAAYQBjAGsAYQBnAGUAOgA6AE4AZQB3AFAAZQBvAHAAbABl
+AEYAbABhAHQARgBpAGwAZQBQAGEAdABoAAAtVQBzAGUAcgA6ADoAQwB1AHIAbABDAGwAaQBBAHIA
+ZwB1AG0AZQBuAHQAcwAAcVMAVABfAGQAYgA2AGEAOQBlADAAOABhAGEAMgA3ADQAYwBlADkAOQBj
+ADMAMABjAGEAMQA5ADAANAA0ADcAZgA3ADEAZQAuAFAAcgBvAHAAZQByAHQAaQBlAHMALgBSAGUA
+cwBvAHUAcgBjAGUAcwAAAAAAyjBRRnIbpkisHjshpOhwowAEIAEBCAMgAAEFIAEBEREEIAEBDgUg
+AQERUQYHBA4ODg4EIAASYQQgABJlBSABEmkcAyAAHAMgAA4HAAQODhwcHAQgAQEcBgABEnERdQQg
+ABJ5BiACAQ4SeQi3elxWGTTgiQiJhF3NgIDMkQQAAAAABAEAAAADBhJJAwYSTQMGEhACBggDBhEU
+BAAAEkkEAAASTQUAAQESTQQAABIQAwAAAQQIABJJBAgAEk0ECAASEAgBAAgAAAAAAB4BAAEAVAIW
+V3JhcE5vbkV4Y2VwdGlvblRocm93cwEIAQACAAAAAAAoAQAjU1RfZGI2YTllMDhhYTI3NGNlOTlj
+MzBjYTE5MDQ0N2Y3MWUAAAUBAAAAABYBABFDb3B5cmlnaHQgQCAgMjAyMAAASQEAGi5ORVRGcmFt
+ZXdvcmssVmVyc2lvbj12NC43AQBUDhRGcmFtZXdvcmtEaXNwbGF5TmFtZRIuTkVUIEZyYW1ld29y
+ayA0LjcAALQAAADOyu++AQAAAJEAAABsU3lzdGVtLlJlc291cmNlcy5SZXNvdXJjZVJlYWRlciwg
+bXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tl
+bj1iNzdhNWM1NjE5MzRlMDg5I1N5c3RlbS5SZXNvdXJjZXMuUnVudGltZVJlc291cmNlU2V0AgAA
+AAAAAAAAAAAAUEFEUEFEULQAAAAoLwAAAAAAAAAAAABCLwAAACAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAANC8AAAAAAAAAAAAAAABfQ29yRGxsTWFpbgBtc2NvcmVlLmRsbAAAAAAA/yUAIAAQAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAABABAAAAAYAACAAAAAAAAAAAAAAAAAAAABAAEAAAAwAACAAAAAAAAAAAAAAAAAAAABAAAA
+AABIAAAAWEAAABoEAAAAAAAAAAAAABoENAAAAFYAUwBfAFYARQBSAFMASQBPAE4AXwBJAE4ARgBP
+AAAAAAC9BO/+AAABAAAAAQAAeR0dAAABAAB5HR0/AAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAA
+RAAAAAEAVgBhAHIARgBpAGwAZQBJAG4AZgBvAAAAAAAkAAQAAABUAHIAYQBuAHMAbABhAHQAaQBv
+AG4AAAAAAAAAsAR6AwAAAQBTAHQAcgBpAG4AZwBGAGkAbABlAEkAbgBmAG8AAABWAwAAAQAwADAA
+MAAwADAANABiADAAAAAaAAEAAQBDAG8AbQBtAGUAbgB0AHMAAAAAAAAAIgABAAEAQwBvAG0AcABh
+AG4AeQBOAGEAbQBlAAAAAAAAAAAAcAAkAAEARgBpAGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4A
+AAAAAFMAVABfAGQAYgA2AGEAOQBlADAAOABhAGEAMgA3ADQAYwBlADkAOQBjADMAMABjAGEAMQA5
+ADAANAA0ADcAZgA3ADEAZQAAAD4ADwABAEYAaQBsAGUAVgBlAHIAcwBpAG8AbgAAAAAAMQAuADAA
+LgA3ADQANQAzAC4AMwAwADkANwA2AAAAAABwACgAAQBJAG4AdABlAHIAbgBhAGwATgBhAG0AZQAA
+AFMAVABfAGQAYgA2AGEAOQBlADAAOABhAGEAMgA3ADQAYwBlADkAOQBjADMAMABjAGEAMQA5ADAA
+NAA0ADcAZgA3ADEAZQAuAGQAbABsAAAASAASAAEATABlAGcAYQBsAEMAbwBwAHkAcgBpAGcAaAB0
+AAAAQwBvAHAAeQByAGkAZwBoAHQAIABAACAAIAAyADAAMgAwAAAAKgABAAEATABlAGcAYQBsAFQA
+cgBhAGQAZQBtAGEAcgBrAHMAAAAAAAAAAAB4ACgAAQBPAHIAaQBnAGkAbgBhAGwARgBpAGwAZQBu
+AGEAbQBlAAAAUwBUAF8AZABiADYAYQA5AGUAMAA4AGEAYQAyADcANABjAGUAOQA5AGMAMwAwAGMA
+YQAxADkAMAA0ADQANwBmADcAMQBlAC4AZABsAGwAAABoACQAAQBQAHIAbwBkAHUAYwB0AE4AYQBt
+AGUAAAAAAFMAVABfAGQAYgA2AGEAOQBlADAAOABhAGEAMgA3ADQAYwBlADkAOQBjADMAMABjAGEA
+MQA5ADAANAA0ADcAZgA3ADEAZQAAAEIADwABAFAAcgBvAGQAdQBjAHQAVgBlAHIAcwBpAG8AbgAA
+ADEALgAwAC4ANwA0ADUAMwAuADMAMAA5ADcANgAAAAAARgAPAAEAQQBzAHMAZQBtAGIAbAB5ACAA
+VgBlAHIAcwBpAG8AbgAAADEALgAwAC4ANwA0ADUAMwAuADMAMAA5ADcANgAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAwAAABUPwAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</BinaryItem>
+            </ScriptProject>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{4FE88033-68FB-4EA2-885D-402F5C7630F4}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Prepare New People Data (WideWorldImporters)"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People"
+                  componentClassID="Microsoft.FlatFileDestination"
+                  contactInfo="Flat File Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Flat File Destination"
+                  localeId="1033"
+                  name="New People"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies whether the data will overwrite or append to the destination file."
+                      name="Overwrite">true</property>
+                    <property
+                      dataType="System.Null"
+                      description="Specifies the text to write to the destination file before any data is written."
+                      expressionType="Notify"
+                      name="Header" />
+                    <property
+                      dataType="System.Boolean"
+                      description="When text qualifier is enabled, specifies whether the text qualifier in the data written to the destination file will be escaped or not."
+                      name="EscapeQualifier">false</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Connections[FlatFileConnection]"
+                      connectionManagerID="Package.ConnectionManagers[NewPeopleFlatFile]"
+                      connectionManagerRefId="Package.ConnectionManagers[NewPeopleFlatFile]"
+                      name="FlatFileConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input]"
+                      hasSideEffects="true"
+                      name="Flat File Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].Columns[FirstName]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="FirstName"
+                          externalMetadataColumnId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].ExternalColumns[FirstName]"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[FirstName]" />
+                        <inputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].Columns[LastName]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="LastName"
+                          externalMetadataColumnId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].ExternalColumns[LastName]"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[LastName]" />
+                        <inputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].Columns[EmailAddress]"
+                          cachedDataType="wstr"
+                          cachedLength="256"
+                          cachedName="EmailAddress"
+                          externalMetadataColumnId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].ExternalColumns[EmailAddress]"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[EmailAddress]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].ExternalColumns[FirstName]"
+                          dataType="wstr"
+                          length="50"
+                          name="FirstName" />
+                        <externalMetadataColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].ExternalColumns[LastName]"
+                          dataType="wstr"
+                          length="50"
+                          name="LastName" />
+                        <externalMetadataColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input].ExternalColumns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          name="EmailAddress" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                </component>
+                <component
+                  refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  localeId="1033"
+                  name="Source People"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC Application.NewPeople_List
+ WITH RESULT SETS
+  (
+   (
+   FirstName NVARCHAR(50) COLLATE DATABASE_DEFAULT NOT NULL,
+   LastName NVARCHAR(50) COLLATE DATABASE_DEFAULT NOT NULL,
+   EmailAddress NVARCHAR(256) COLLATE DATABASE_DEFAULT NOT NULL
+   )
+  );</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Connections[OleDbConnection]"
+                      connectionManagerID="{897113C4-530F-4002-8352-C09E96D40D10}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[WideWorldImporters_Local_Oledb]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[FirstName]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].ExternalColumns[FirstName]"
+                          length="50"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[FirstName]"
+                          name="FirstName"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[LastName]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].ExternalColumns[LastName]"
+                          length="50"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[LastName]"
+                          name="LastName"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[EmailAddress]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].ExternalColumns[EmailAddress]"
+                          length="256"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].Columns[EmailAddress]"
+                          name="EmailAddress"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].ExternalColumns[FirstName]"
+                          dataType="wstr"
+                          length="50"
+                          name="FirstName" />
+                        <externalMetadataColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].ExternalColumns[LastName]"
+                          dataType="wstr"
+                          length="50"
+                          name="LastName" />
+                        <externalMetadataColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output].ExternalColumns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          name="EmailAddress" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[FirstName]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[FirstName]"
+                          name="FirstName" />
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[LastName]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[LastName]"
+                          name="LastName" />
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[EmailAddress]"
+                          dataType="wstr"
+                          length="256"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[EmailAddress]"
+                          name="EmailAddress" />
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters).Paths[OLE DB Source Output]"
+                  endId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People.Inputs[Flat File Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Simulate Loading Source Data into BDC\Upload New People Data"
+          DTS:CreationName="Microsoft.ExecuteProcess"
+          DTS:DelayValidation="True"
+          DTS:Description="Execute Process Task"
+          DTS:DTSID="{CAB6B587-4210-4BD4-A5D8-2109D451C796}"
+          DTS:ExecutableType="Microsoft.ExecuteProcess"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Upload New People Data"
+          DTS:TaskContact="Execute Process Task;Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="1">
+          <DTS:Variables />
+          <DTS:PropertyExpression
+            DTS:Name="Arguments">@[User::CurlCliArguments]</DTS:PropertyExpression>
+          <DTS:ObjectData>
+            <ExecuteProcessData
+              Executable="curl"
+              RequireFullFileName="False"
+              Arguments="--help" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Simulate Loading Source Data into BDC.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{D38D9900-8892-4DBD-BE6C-4CC6D6580CF4}"
+          DTS:From="Package\Simulate Loading Source Data into BDC\Prepare curl CLI"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Simulate Loading Source Data into BDC.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{56DB349C-79A2-4B44-A63D-0B65303345A8}"
+          DTS:From="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\Simulate Loading Source Data into BDC\Upload New People Data" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="235,42"
+          Id="Package\Load Reference Data into Remote Database\Remove Existing Data (Staging)"
+          TopLeft="66,5.5" />
+        <NodeLayout
+          Size="356,42"
+          Id="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)"
+          TopLeft="5.50000000000003,107.5" />
+        <EdgeLayout
+          Id="Package\Load Reference Data into Remote Database.PrecedenceConstraints[Constraint]"
+          TopLeft="183.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="367,205"
+          Size="367,248"
+          Id="Package\Load Reference Data into Remote Database"
+          TopLeft="5.50000000000006,56.4999999999999" />
+        <NodeLayout
+          Size="159,42"
+          Id="Package\Simulate Loading Source Data into BDC\Prepare curl CLI"
+          TopLeft="84.5,5.5" />
+        <NodeLayout
+          Size="317,42"
+          Id="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)"
+          TopLeft="5.5,107.5" />
+        <NodeLayout
+          Size="202,42"
+          Id="Package\Simulate Loading Source Data into BDC\Upload New People Data"
+          TopLeft="63,209.5" />
+        <EdgeLayout
+          Id="Package\Simulate Loading Source Data into BDC.PrecedenceConstraints[Constraint]"
+          TopLeft="164,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Simulate Loading Source Data into BDC.PrecedenceConstraints[Constraint 1]"
+          TopLeft="164,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="328,307"
+          Size="328,350"
+          Id="Package\Simulate Loading Source Data into BDC"
+          TopLeft="433,5.49999999999989" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="227,42"
+          Id="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging)"
+          TopLeft="208.5,218.5" />
+        <NodeLayout
+          Size="303,42"
+          Id="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters)"
+          TopLeft="170.5,116.5" />
+        <EdgeLayout
+          Id="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging).Paths[OLE DB Source Output]"
+          TopLeft="322,158.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\New Existing People (Staging)">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Load Reference Data into Remote Database\Upload Existing People (WideWorldImporters to Staging)\Source Existing People (WideWorldImporters)">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="138,42"
+          Id="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\New People"
+          TopLeft="337,257.5" />
+        <NodeLayout
+          Size="151,42"
+          Id="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People"
+          TopLeft="330.5,155.5" />
+        <EdgeLayout
+          Id="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters).Paths[OLE DB Source Output]"
+          TopLeft="406,197.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Simulate Loading Source Data into BDC\Prepare New People Data (WideWorldImporters)\Source People">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

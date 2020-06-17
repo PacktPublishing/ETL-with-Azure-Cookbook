@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="Staging_BDC_Oledb"
+  DTS:DTSID="{B34C9451-9BB4-45B2-BC16-10296E19952F}"
+  DTS:CreationName="OLEDB">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="Data Source=52.190.45.59,31433;User ID=admin;Initial Catalog=Staging;Provider=SQLNCLI11.1;Persist Security Info=True;Auto Translate=False;">
+      <DTS:Password
+        DTS:Name="Password"
+        Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA7y4MHewu5k2l+PGrpEF98QAAAAACAAAAAAAQZgAAAAEAACAAAACz7GRDoWFkWZ8jCzlxE4hcDbTavaGkVRaoK1ajfzLhHgAAAAAOgAAAAAIAACAAAACRNmYSnbw4RdEInPw5ZwIXFBlFmUtPTUYZYOga1mNSC4AAAACyjim2u6VcAreNl4Pb7UaBsI0vrBzIyTdxTg2Y9eeVNXs1JquuT5iQFr5jLoeuqDtsQ7aZ3/KEpKW0As0Zv/2MwNvjPdLfJORiRJcs4nqv0r4LJUNpB42ls5+brAh7H4Tc2YqLOa1HHho9R7VD62hhw87Y8fYYJ59kFVn6AwPusEAAAAAOkSVkKAWcvhVlxBPW27KkGsmo3A0UlsZzZpGBHPmYIrCP7ALbCf81vo/GKDcm85o1NAX6A+lDVLIDdNJ9TQPi</DTS:Password>
+    </DTS:ConnectionManager>
+  </DTS:ObjectData>
+</DTS:ConnectionManager>
