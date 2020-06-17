@@ -1,0 +1,9 @@
+C:\ETL-with-Azure\Chapter05\ApplicationName.dll
+C:\ETL-with-Azure\Chapter05\ApplicationName.pdb
+C:\ETL-with-Azure\Chapter05\Files\ApplicationName.dll
+C:\ETL-with-Azure\Chapter05\Files\ApplicationName.pdb
+C:\Users\ML\source\repos\SSISCustomization\ApplicationName\obj\Release\ApplicationName.csprojAssemblyReference.cache
+C:\Users\ML\source\repos\SSISCustomization\ApplicationName\obj\Release\ApplicationName.csproj.CoreCompileInputs.cache
+C:\Users\ML\source\repos\SSISCustomization\ApplicationName\obj\Release\ApplicationName.csproj.CopyComplete
+C:\Users\ML\source\repos\SSISCustomization\ApplicationName\obj\Release\ApplicationName.dll
+C:\Users\ML\source\repos\SSISCustomization\ApplicationName\obj\Release\ApplicationName.pdb
