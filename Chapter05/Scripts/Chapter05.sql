@@ -124,6 +124,9 @@ SELECT *
 
 SELECT *
   FROM ETL.PurchaseOrders_Modified;
+
+SELECT *
+  FROM DW.PurchaseOrders;
 GO
 
 
