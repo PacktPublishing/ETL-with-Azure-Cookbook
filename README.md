@@ -53,6 +53,7 @@ With the following software and hardware list you can run all code files present
 | 1 - 10   |   Azure, SQL Server 2019, Visual Studio 2019, Azure Data Explorer                    | Windows, Mac OS X, and Linux (Any) |
 |          |   SQL Server Management Server, Azure Data Studio                                    |                                    |
 
+<img src="https://github.com/PacktPublishing/ETL-with-Azure-Cookbook/blob/master/ADS.PNG">
 
 We also provide a PDF file that has color images of the screenshots/diagrams used in this book. [Click here to download it](https://static.packt-cdn.com/downloads/9781800203310_ColorImages.pdf).
 
