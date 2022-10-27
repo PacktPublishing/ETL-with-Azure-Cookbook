@@ -73,3 +73,7 @@ has more than 18 years of experience working with Microsoft SQL Server, mostly f
 **Madina Saitakhmetova** 
 is a developer specializing in BI. She has been in IT for 15 years, working with Microsoft SQL, .NET, Microsoft BI, Azure, and building BI solutions for medical, educational, and engineering companies. Her adventure with Microsoft BI began with Analysis Services and SSIS, and in later years she has been building her expertise in ETL/ELT, both on-premises and in the cloud. Finding patterns, automating processes, and making BI teams work more efficiently are challenges that drive her. During the past few years, BIML has become an important part of her work, increasing its efficiency and quality.
 
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781800203310">https://packt.link/free-ebook/9781800203310 </a> </p>
